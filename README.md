@@ -1,6 +1,6 @@
 # KubeSail PiBox Installer
 
-This script installs a service which verifies that the KubeSail agent is installed after MicroK8s has started.
+This script installs a service which verifies that the KubeSail agent is installed (for your KubeSail user) after MicroK8s has started.
 
 To use this script, write your KubeSail username to `/boot/kubesail-username.txt` and then run:
 
