@@ -1,4 +1,4 @@
-mkdir /opt/kubesail/
+mkdir -p /opt/kubesail/
 
 # Install service script
 cat <<'EOF' > /opt/kubesail/init.sh
