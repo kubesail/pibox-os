@@ -1,7 +1,7 @@
 mkdir /opt/kubesail/
 
 # Install service script
-cat <<'EOF' >> /opt/kubesail/init.sh
+cat <<'EOF' > /opt/kubesail/init.sh
 #!/bin/bash
 if [[ ! -f /boot/kubesail-username.txt ]]; then
     echo "Not installing KubeSail agent: /boot/kubesail-username.txt file not found"
@@ -20,7 +20,7 @@ EOF
 chmod +x /opt/kubesail/init.sh
 
 # Install service
-cat <<'EOF' >> /etc/systemd/system/kubesail-init.service
+cat <<'EOF' > /etc/systemd/system/kubesail-init.service
 [Unit]
 After=network.service
 After=snap.microk8s.daemon-apiserver
