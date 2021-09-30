@@ -5,5 +5,5 @@ This script installs a service which verifies that the KubeSail agent is install
 To use this script, write your KubeSail username to `/boot/kubesail-username.txt` and then run:
 
 ```bash
-sudo source <(curl -s https://raw.githubusercontent.com/kubesail/agent-installer/main/install.sh)
+curl -s https://raw.githubusercontent.com/kubesail/agent-installer/main/install.sh | sudo bash
 ````
