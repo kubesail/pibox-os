@@ -4,11 +4,11 @@ mkdir /opt/kubesail/
 cat <<'EOF' >> /opt/kubesail/init.sh
 #!/bin/bash
 if [[ ! -f /boot/kubesail-username.txt ]]; then
-    echo "Not installing KubeSail agent: /boot/firmware/kubesail-username.txt file not found"
+    echo "Not installing KubeSail agent: /boot/kubesail-username.txt file not found"
     exit 0
 fi
 
-KUBESAIL_USERNAME=$(cat /boot/firmware/kubesail-username.txt)
+KUBESAIL_USERNAME=$(cat /boot/kubesail-username.txt)
 echo "Installing KubeSail agent with username: $KUBESAIL_USERNAME"
 
 microk8s.kubectl get namespace kubesail-agent || {
