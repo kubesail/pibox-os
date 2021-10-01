@@ -44,20 +44,7 @@ curl -s https://raw.githubusercontent.com/kubesail/pibox-os/main/agent-installer
 
 ## PWM Fan Support
 
-To make the fan quiet and only spin as fast as necessary, we install a service that sends the correct signal to the fan using the Pi's hardware PWM controller.
-
-```bash
-git clone https://github.com/kubesail/pibox-os.git
-cd pibox-os/rpi-pwm-fan
-tar zxvf bcm2835-1.68.tar.gz
-cd bcm2835-1.68
-./configure
-make
-sudo make install
-cd ..
-make
-sudo make install
-```
+To make the fan quiet and only spin as fast as necessary, we install a service that sends the correct signal to the fan using the Pi's hardware PWM controller. See the [pwm-fan]() directory for details.
 
 ## LCD display
 
