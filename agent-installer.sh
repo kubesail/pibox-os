@@ -1,3 +1,5 @@
+#!/bin/bash
+
 mkdir -p /opt/kubesail/
 
 # Install service script
@@ -12,7 +14,6 @@ KUBESAIL_USERNAME=$(cat /boot/kubesail-username.txt)
 echo "Installing KubeSail agent with username: $KUBESAIL_USERNAME"
 
 microk8s.kubectl get namespace kubesail-agent || {
-    #microk8s.refresh-certs
     microk8s.kubectl create -f https://byoc.kubesail.com/$KUBESAIL_USERNAME.yaml?initialID=PiBox
 }
 EOF
