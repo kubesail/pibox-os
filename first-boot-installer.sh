@@ -5,9 +5,9 @@ mkdir -p /opt/pibox/
 # Install service script
 cat <<'EOF' > /opt/pibox/first-boot.sh
 #!/bin/bash
+PATH_GITHUB_USERNAME=/boot/github-ssh-username.txt
 PATH_SSH_CERTS=/boot/refresh-ssh-certs
 PATH_MICROK8S_CERTS=/boot/refresh-microk8s-certs
-PATH_GITHUB_USERNAME=/boot/github-ssh-username.txt
 
 GITHUB_USERNAME=$(cat $PATH_GITHUB_USERNAME)
 if [[ -n "$GITHUB_USERNAME" ]]; then
