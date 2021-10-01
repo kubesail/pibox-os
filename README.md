@@ -44,7 +44,7 @@ curl -s https://raw.githubusercontent.com/kubesail/pibox-os/main/agent-installer
 
 ## PWM Fan Support
 
-To make the fan quiet and only spin as fast as necessary, we install a service that sends the correct signal to the fan using the Pi's hardware PWM controller. See the [pwm-fan]() directory for details.
+To make the fan quiet and only spin as fast as necessary, we install a service that sends the correct signal to the fan using the Pi's hardware PWM controller. See the [pwm-fan](pwm-fan) directory for details.
 
 ## LCD display
 
