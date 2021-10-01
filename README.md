@@ -1,4 +1,8 @@
-# KubeSail PiBox Installer
+# PiBox OS
+
+This repository contains scripts and kernel modules used to modify Raspberry Pi OS in order to take full advantage of the PiBox hardware.
+
+## KubeSail PiBox Installer
 
 This script installs a service which verifies that the KubeSail agent is installed (for your KubeSail user) after MicroK8s has started.
 
