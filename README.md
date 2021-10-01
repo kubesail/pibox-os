@@ -6,12 +6,18 @@ This repository contains scripts and kernel modules used to modify Raspberry Pi 
 
 ## First Boot
 
-This script installs a service which checks if a file exists at `/boot/pibox-first-boot` and refreshes certs. Also optionally installs SSH keys from GitHub public keys if `/boot/github-username.txt` contains a GitHub username.
+This script installs a service which can:
 
-To use this script, replace `YOUR_GITHUB_USERNAME` and run:
+- Install SSH keys from GitHub public keys if `/boot/github-username.txt` contains a GitHub username
+- Refresh SSH host certs
+- Refresh MicroK8s certs
+
+To use this script: replace `YOUR_GITHUB_USERNAME` and run:
 
 ```bash
 echo "YOUR_GITHUB_USERNAME" | sudo tee -a /boot/github-ssh-username.txt
+sudo touch /boot/refresh-ssh-certs
+sudo touch /boot/refresh-microk8s-certs
 ```
 
 then run:
