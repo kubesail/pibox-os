@@ -5,34 +5,32 @@ mkdir -p /opt/pibox/
 # Install service script
 cat <<'EOF' > /opt/pibox/first-boot.sh
 #!/bin/bash
-PATH_FIRSTBOOT=/boot/pibox-first-boot
-PATH_GITHUB_USERNAME=/boot/github-username.txt
-
-if [[ ! -f $PATH_FIRSTBOOT ]]; then
-    echo "Skipping first-boot script, $PATH_FIRSTBOOT file not found"
-    exit 0
-fi
-
-echo "Updating apt registry"
-apt update
+PATH_SSH_CERTS=/boot/refresh-ssh-certs
+PATH_MICROK8S_CERTS=/boot/refresh-microk8s-certs
+PATH_GITHUB_USERNAME=/boot/github-ssh-username.txt
 
 GITHUB_USERNAME=$(cat $PATH_GITHUB_USERNAME)
 if [[ -n "$GITHUB_USERNAME" ]]; then
     echo "Installing public SSH keys for GitHub user: $GITHUB_USERNAME"
     curl https://github.com/${GITHUB_USERNAME}.keys > ~/.ssh/authorized_keys
     sed -i -e s/#PasswordAuthentication\ yes/PasswordAuthentication\ no/g /etc/ssh/sshd_config
+    rm $PATH_GITHUB_USERNAME
   else
     echo "Skipping GitHub SSH key installation, $PATH_GITHUB_USERNAME does not exist or is blank"
 fi
 
-echo "Generating new SSH host certs"
-rm /etc/ssh/ssh_host_*
-dpkg-reconfigure openssh-server
+if [[ -f $PATH_SSH_CERTS ]]; then
+    echo "Generating new SSH host certs"
+    rm /etc/ssh/ssh_host_*
+    dpkg-reconfigure openssh-server
+    rm $PATH_SSH_CERTS
+fi
 
-echo "Generating new MicroK8s certs"
-microk8s.refresh-certs
-
-rm $PATH_FIRSTBOOT
+if [[ -f $PATH_MICROK8S_CERTS ]]; then
+    echo "Generating new MicroK8s certs"
+    microk8s.refresh-certs
+    rm $PATH_MICROK8S_CERTS
+fi
 EOF
 
 chmod +x /opt/pibox/first-boot.sh
