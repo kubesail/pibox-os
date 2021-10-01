@@ -36,3 +36,24 @@ then run:
 ```bash
 curl -s https://raw.githubusercontent.com/kubesail/pibox-os/main/agent-installer.sh | sudo bash
 ````
+
+## PWM Fan Support
+
+To make the fan quiet and only spin as fast as necessary, we install a service that sends the correct signal to the fan using the Pi's hardware PWM controller. This code can be found in [our fork]() of `alwynallan`'s original gist on GitHub.
+
+```bash
+git clone https://github.com/kubesail/pibox-os.git
+cd pibox-os/rpi-pwm-fan
+tar zxvf bcm2835-1.68.tar.gz
+cd bcm2835-1.68
+./configure
+make
+sudo make install
+cd ..
+make
+sudo make install
+```
+
+## LCD display
+
+The python code used to render stats to the LCD display lives in the [lcd-display](lcd-display) directory. More info can be found on the PiBox docs: https://docs.kubesail.com/guides/pibox/os/#enabling-the-13-lcd-display
