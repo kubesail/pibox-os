@@ -42,7 +42,7 @@ cat <<'EOF' > /etc/systemd/system/pibox-first-boot.service
 [Unit]
 After=network.service
 [Service]
-ExecStart=/opt/pibox/init.sh
+ExecStart=/opt/pibox/first-boot.sh
 [Install]
 WantedBy=default.target
 EOF
