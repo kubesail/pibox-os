@@ -1,5 +1,7 @@
 # PiBox OS
 
+[Download the latest version](https://github.com/kubesail/pibox-os/releases)
+
 This repository contains scripts and kernel modules used to modify Raspberry Pi OS in order to take full advantage of the PiBox hardware.
 
 ## KubeSail PiBox Installer
