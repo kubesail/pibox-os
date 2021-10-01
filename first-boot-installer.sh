@@ -20,6 +20,7 @@ GITHUB_USERNAME=$(cat $PATH_GITHUB_USERNAME)
 if [[ -n "$GITHUB_USERNAME" ]]; then
     echo "Installing public SSH keys for GitHub user: $GITHUB_USERNAME"
     curl https://github.com/${GITHUB_USERNAME}.keys > ~/.ssh/authorized_keys
+    sed -i -e s/#PasswordAuthentication\ yes/PasswordAuthentication\ no/g /etc/ssh/sshd_config
   else
     echo "Skipping GitHub SSH key installation, $PATH_GITHUB_USERNAME does not exist or is blank"
 fi
