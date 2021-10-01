@@ -12,7 +12,7 @@ PATH_MICROK8S_CERTS=/boot/refresh-microk8s-certs
 GITHUB_USERNAME=$(cat $PATH_GITHUB_USERNAME)
 if [[ -n "$GITHUB_USERNAME" ]]; then
     echo "Installing public SSH keys for GitHub user: $GITHUB_USERNAME"
-    curl https://github.com/${GITHUB_USERNAME}.keys > ~/.ssh/authorized_keys
+    curl https://github.com/${GITHUB_USERNAME}.keys > /home/pi/.ssh/authorized_keys
     sed -i -e s/#PasswordAuthentication\ yes/PasswordAuthentication\ no/g /etc/ssh/sshd_config
     rm $PATH_GITHUB_USERNAME
   else
