@@ -35,7 +35,7 @@ microk8s.refresh-certs
 rm $PATH_FIRSTBOOT
 EOF
 
-chmod +x /opt/pibox/init.sh
+chmod +x /opt/pibox/first-boot.sh
 
 # Install service
 cat <<'EOF' > /etc/systemd/system/pibox-first-boot.service
