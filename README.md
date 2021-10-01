@@ -11,5 +11,5 @@ echo "YOUR_KUBESAIL_USERNAME" | sudo tee -a /boot/kubesail-username.txt
 then run:
 
 ```bash
-curl -s https://raw.githubusercontent.com/kubesail/agent-installer/main/install.sh | sudo bash
+curl -s https://raw.githubusercontent.com/kubesail/pibox-os/main/agent-installer.sh | sudo bash
 ````
