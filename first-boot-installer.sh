@@ -6,7 +6,7 @@ mkdir -p /opt/pibox/
 cat <<'EOF' > /opt/pibox/first-boot.sh
 #!/bin/bash
 PATH_FIRSTBOOT=/boot/pibox-first-boot
-PATH_GITHUB_USERNAME=/boot/github-username
+PATH_GITHUB_USERNAME=/boot/github-username.txt
 
 if [[ ! -f $PATH_FIRSTBOOT ]]; then
     echo "Skipping first-boot script, $PATH_FIRSTBOOT file not found"
@@ -17,7 +17,7 @@ echo "Updating apt registry"
 apt update
 
 GITHUB_USERNAME=$(cat $PATH_GITHUB_USERNAME)
-if [ -n "$GITHUB_USERNAME" ]; then
+if [[ -n "$GITHUB_USERNAME" ]]; then
     echo "Installing public SSH keys for GitHub user: $GITHUB_USERNAME"
     curl https://github.com/${GITHUB_USERNAME}.keys > ~/.ssh/authorized_keys
   else
