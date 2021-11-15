@@ -20,6 +20,37 @@ EOF
 
 chmod +x /opt/kubesail/init.sh
 
+cat <<'EOF' > /usr/local/bin/kubesail
+#!/bin/bash
+
+if [[ $(/usr/bin/id -u) -ne 0 ]]; then
+    echo "Not running as root. Try re-running with sudo, e.g. $(tput bold)sudo kubesail init$(tput sgr0)"
+    exit
+fi
+
+read -p "What is your KubeSail username? " KUBESAIL_USERNAME
+
+if [ -z "$KUBESAIL_USERNAME" ]; then
+    echo "Username is empty, not installing KubeSail."
+    exit 1
+fi
+
+read -p "Do you want to install $(tput bold)${KUBESAIL_USERNAME}$(tput sgr0)'s public GitHub $KUBESAIL_USERNAME for SSH access? [Y/n] " GITHUB_SSH
+GITHUB_SSH=${GITHUB_SSH:-Y}
+
+echo $KUBESAIL_USERNAME > /boot/kubesail-username.txt
+
+if [ $GITHUB_SSH = "Y" ]; then
+    echo $KUBESAIL_USERNAME > /boot/github-ssh-username.txt
+fi
+
+echo "Installing KubeSail agent. Please wait..."
+
+sudo service kubesail-init start
+EOF
+chmod +x /usr/local/bin/kubesail
+
+
 # Install service
 cat <<'EOF' > /etc/systemd/system/kubesail-init.service
 [Unit]
