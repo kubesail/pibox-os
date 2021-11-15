@@ -42,12 +42,15 @@ echo $KUBESAIL_USERNAME > /boot/kubesail-username.txt
 
 if [ $GITHUB_SSH = "Y" ]; then
     echo $KUBESAIL_USERNAME > /boot/github-ssh-username.txt
+    echo "Installing GitHub Keys..."
+    systemctl start pibox-first-boot.service
 fi
 
 echo "Installing KubeSail agent. Please wait..."
 
-sudo service kubesail-init start
+systemctl start kubesail-init.service
 EOF
+
 chmod +x /usr/local/bin/kubesail
 
 
