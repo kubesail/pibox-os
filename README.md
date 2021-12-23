@@ -6,15 +6,6 @@ This repository contains scripts and kernel modules used to modify Raspberry Pi 
 
 ## Setup Script
 
-This script installs two services which run at boot. These are lightweight services and add no overhead to the boot time if nothing needs to be done.
-
-- `kubesail-init.service`
-  - Verifies that the KubeSail agent is installed (for your KubeSail user) after K3s has started.
-- `pibox-first-boot.service`
-  - Install SSH keys from GitHub public keys if `/boot/github-username.txt` contains a GitHub username
-  - Refresh SSH host certs
-  - Refresh K3s certs
-
 Install this setup script
 
 ```bash
@@ -32,6 +23,17 @@ sudo touch /boot/refresh-ssh-certs
 sudo touch /boot/refresh-k3s-certs
 sudo reboot now
 ```
+
+**About this script**
+
+This script installs two services which run at boot. These are lightweight services and add no overhead to the boot time if nothing needs to be done.
+
+- `kubesail-init.service`
+  - Verifies that the KubeSail agent is installed (for your KubeSail user) after K3s has started.
+- `pibox-first-boot.service`
+  - Install SSH keys from GitHub public keys if `/boot/github-username.txt` contains a GitHub username
+  - Refresh SSH host certs
+  - Refresh K3s certs
 
 ## PWM Fan Support
 
