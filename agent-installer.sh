@@ -13,8 +13,8 @@ fi
 KUBESAIL_USERNAME=$(cat /boot/kubesail-username.txt)
 echo "Installing KubeSail agent with username: $KUBESAIL_USERNAME"
 
-microk8s.kubectl get namespace kubesail-agent || {
-    microk8s.kubectl create -f https://byoc.kubesail.com/$KUBESAIL_USERNAME.yaml?initialID=PiBox
+k3s kubectl get namespace kubesail-agent || {
+    k3s kubectl create -f https://byoc.kubesail.com/$KUBESAIL_USERNAME.yaml?initialID=PiBox
 }
 EOF
 
@@ -58,7 +58,7 @@ chmod +x /usr/local/bin/kubesail
 cat <<'EOF' > /etc/systemd/system/kubesail-init.service
 [Unit]
 After=network.service
-After=snap.microk8s.daemon-apiserver
+After=k3s.service
 [Service]
 ExecStart=/opt/kubesail/init.sh
 [Install]
