@@ -71,7 +71,7 @@ cat <<'EOF' > /opt/kubesail/pibox-first-boot.sh
 #!/bin/bash
 PATH_GITHUB_USERNAME=/boot/github-ssh-username.txt
 PATH_SSH_CERTS=/boot/refresh-ssh-certs
-PATH_MICROK8S_CERTS=/boot/refresh-microk8s-certs
+PATH_K3S_CERTS=/boot/refresh-k3s-certs
 
 if [[ -f $PATH_GITHUB_USERNAME ]]; then
     set -e
@@ -96,10 +96,31 @@ if [[ -f $PATH_SSH_CERTS ]]; then
     rm $PATH_SSH_CERTS
 fi
 
-if [[ -f $PATH_MICROK8S_CERTS ]]; then
-    echo "Generating new MicroK8s certs"
-    microk8s.refresh-certs
-    rm $PATH_MICROK8S_CERTS
+if [[ -f $PATH_K3S_CERTS ]]; then
+    echo "Generating new K3s certs"
+
+    APISERVER_TIMEOUT=60 # Wait n seconds for k3s apiserver to start
+    for i in $(seq 1 $APISERVER_TIMEOUT); do 
+        APISERVER_STATUS="$(curl -s -o /dev/null -w "%{http_code}" --max-time 5 -k https://localhost:6443)"
+        echo $APISERVER_STATUS
+        if [ $APISERVER_STATUS == "401" ]; then
+            break
+        fi
+        sleep 1
+    done
+    if [ $APISERVER_STATUS != "401" ]; then
+        echo "Timeout waiting for k3s apiserver to start"
+        exit 1
+    fi
+
+    k3s kubectl --insecure-skip-tls-verify -n kube-system delete secret k3s-serving
+    service k3s stop
+    rm -vrf /var/lib/rancher/k3s/agent/*.key \
+        /var/lib/rancher/k3s/agent/*.crt \
+        /etc/rancher/k3s/k3s.yaml \
+        /var/lib/rancher/k3s/server/tls
+    service k3s start
+    rm $PATH_K3S_CERTS
 fi
 EOF
 chmod +x /opt/kubesail/pibox-first-boot.sh
