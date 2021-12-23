@@ -2,7 +2,7 @@
 
 mkdir -p /opt/kubesail/
 
-# Install service script
+# Install KubeSail init script
 cat <<'EOF' > /opt/kubesail/init.sh
 #!/bin/bash
 if [[ ! -f /boot/kubesail-username.txt ]]; then
@@ -31,9 +31,9 @@ k3s kubectl get namespace kubesail-agent || {
     k3s kubectl create -f https://byoc.kubesail.com/$KUBESAIL_USERNAME.yaml?initialID=PiBox
 }
 EOF
-
 chmod +x /opt/kubesail/init.sh
 
+# Install KubeSail CLI setup script
 cat <<'EOF' > /usr/local/bin/kubesail
 #!/bin/bash
 
@@ -64,11 +64,47 @@ echo "Installing KubeSail agent. Please wait..."
 
 systemctl start kubesail-init.service
 EOF
-
 chmod +x /usr/local/bin/kubesail
 
+# Install PiBox first boot script
+cat <<'EOF' > /opt/kubesail/pibox-first-boot.sh
+#!/bin/bash
+PATH_GITHUB_USERNAME=/boot/github-ssh-username.txt
+PATH_SSH_CERTS=/boot/refresh-ssh-certs
+PATH_MICROK8S_CERTS=/boot/refresh-microk8s-certs
 
-# Install service
+if [[ -f $PATH_GITHUB_USERNAME ]]; then
+    set -e
+    mkdir -p /home/pi/.ssh
+    GITHUB_USERNAME=$(cat $PATH_GITHUB_USERNAME)
+    echo "Installing public SSH keys for GitHub user: $GITHUB_USERNAME"
+    curl -sS https://github.com/${GITHUB_USERNAME}.keys -o /tmp/authorized_keys.tmp
+    mv /tmp/authorized_keys.tmp /home/pi/.ssh/authorized_keys
+    curl https://github.com/${GITHUB_USERNAME}.keys > /home/pi/.ssh/authorized_keys
+    sed -i -e s/#PasswordAuthentication\ yes/PasswordAuthentication\ no/g /etc/ssh/sshd_config
+    rm $PATH_GITHUB_USERNAME
+    chown -R pi:pi /home/pi/.ssh
+    set +e
+  else
+    echo "Skipping GitHub SSH key installation, $PATH_GITHUB_USERNAME does not exist or is blank"
+fi
+
+if [[ -f $PATH_SSH_CERTS ]]; then
+    echo "Generating new SSH host certs"
+    rm /etc/ssh/ssh_host_*
+    dpkg-reconfigure openssh-server
+    rm $PATH_SSH_CERTS
+fi
+
+if [[ -f $PATH_MICROK8S_CERTS ]]; then
+    echo "Generating new MicroK8s certs"
+    microk8s.refresh-certs
+    rm $PATH_MICROK8S_CERTS
+fi
+EOF
+chmod +x /opt/kubesail/pibox-first-boot.sh
+
+# Install KubeSail init service
 cat <<'EOF' > /etc/systemd/system/kubesail-init.service
 [Unit]
 After=network.service
@@ -79,6 +115,20 @@ ExecStart=/opt/kubesail/init.sh
 WantedBy=default.target
 EOF
 
+
+# Install PiBox first boot service
+cat <<'EOF' > /etc/systemd/system/pibox-first-boot.service
+[Unit]
+After=network.service
+[Service]
+ExecStart=/opt/kubesail/pibox-first-boot.sh
+[Install]
+WantedBy=default.target
+EOF
+
 systemctl daemon-reload
+
+systemctl enable pibox-first-boot.service
+systemctl start pibox-first-boot.service
 systemctl enable kubesail-init.service
 systemctl start kubesail-init.service
