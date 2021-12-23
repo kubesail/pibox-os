@@ -10,6 +10,20 @@ if [[ ! -f /boot/kubesail-username.txt ]]; then
     exit 0
 fi
 
+APISERVER_TIMEOUT=60 # Wait n seconds for k3s apiserver to start
+for i in $(seq 1 $APISERVER_TIMEOUT); do 
+    APISERVER_STATUS="$(curl -s -o /dev/null -w "%{http_code}" --max-time 5 -k https://localhost:6443)"
+    echo $APISERVER_STATUS
+    if [ $APISERVER_STATUS == "401" ]; then
+        break
+    fi
+    sleep 1
+done
+if [ $APISERVER_STATUS != "401" ]; then
+    echo "Timeout waiting for k3s apiserver to start"
+    exit 1
+fi
+
 KUBESAIL_USERNAME=$(cat /boot/kubesail-username.txt)
 echo "Installing KubeSail agent with username: $KUBESAIL_USERNAME"
 
