@@ -49,7 +49,7 @@ if [ -z "$KUBESAIL_USERNAME" ]; then
     exit 1
 fi
 
-read -p "Do you want to install $(tput bold)${KUBESAIL_USERNAME}$(tput sgr0)'s public GitHub $KUBESAIL_USERNAME for SSH access? [Y/n] " GITHUB_SSH
+read -p "Do you want to install $(tput bold)${KUBESAIL_USERNAME}$(tput sgr0)'s public GitHub keys for SSH access? [Y/n] " GITHUB_SSH
 GITHUB_SSH=${GITHUB_SSH:-Y}
 
 echo $KUBESAIL_USERNAME > /boot/kubesail-username.txt
