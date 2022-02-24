@@ -1,8 +1,22 @@
 #!/bin/bash
 set -e
 
+# BE VERY CAREFUL, THIS SCRIPT FORMATS DISKS AND SO IS VERY DANGEROUS
+# We do our best never to never write over a disk with data, but we make no promises!
+# Intended for use with the PiBox
+
 VG_GROUP_NAME="pibox-group"
 DISKS_TO_ADD=""
+
+# To undo this entire script or to test:
+#  umount /var/lib/rancher
+#  umount /var/lib/rancher-ssd
+#  wipefs -af /dev/pibox-group/k3s
+#  lvremove /dev/pibox-group/k3s
+#  vgremove pibox-group
+#  pvremove /dev/sda1
+#  fdisk /dev/sda # delete /dev/sda1
+#  wipefs -a /dev/sda
 
 # For each of the possible 5 disks installed
 for DISK in /dev/sda /dev/sdb /dev/sdc /dev/sdd /dev/sde; do
