@@ -1,6 +1,5 @@
 #!/bin/bash
 set -e
-set -o noglob
 
 VG_GROUP_NAME="pibox-group"
 DISKS_TO_ADD=""
@@ -54,6 +53,7 @@ if [[ "$(vgdisplay ${VG_GROUP_NAME})" == "" && "${DISKS_TO_ADD}" != "" ]]; then
     mount /dev/${VG_GROUP_NAME}/k3s
     # Cleanup old dir
     rm -rf /var/lib/rancher-ssd
+    service k3s start
   else
     mkdir /var/lib/rancher
     mount /dev/${VG_GROUP_NAME}/k3s
