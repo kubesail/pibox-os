@@ -49,13 +49,15 @@ if [ -z "$KUBESAIL_USERNAME" ]; then
     exit 1
 fi
 
-read -p "Do you want to install $(tput bold)${KUBESAIL_USERNAME}$(tput sgr0)'s public GitHub keys for SSH access? [Y/n] " GITHUB_SSH
-GITHUB_SSH=${GITHUB_SSH:-Y}
-
 echo $KUBESAIL_USERNAME > /boot/kubesail-username.txt
 
+read -p "Do you want to install your public GitHub keys for SSH access? [Y/n] " GITHUB_SSH
+GITHUB_SSH=${GITHUB_SSH:-Y}
+
 if [ $GITHUB_SSH = "Y" ]; then
-    echo $KUBESAIL_USERNAME > /boot/github-ssh-username.txt
+    read -p "What is your GitHub username? [$KUBESAIL_USERNAME] " GITHUB_USERNAME
+    GITHUB_USERNAME=${GITHUB_USERNAME:-$KUBESAIL_USERNAME}
+    echo $GITHUB_USERNAME > /boot/github-ssh-username.txt
     echo "Installing GitHub Keys..."
     systemctl start pibox-first-boot.service
 fi
@@ -70,8 +72,8 @@ chmod +x /usr/local/bin/kubesail
 cat <<'EOF' > /opt/kubesail/pibox-first-boot.sh
 #!/bin/bash
 PATH_GITHUB_USERNAME=/boot/github-ssh-username.txt
-PATH_SSH_CERTS=/boot/refresh-ssh-certs
-PATH_K3S_CERTS=/boot/refresh-k3s-certs
+PATH_REFRESH_SSH_CERTS=/boot/refresh-ssh-certs
+PATH_REFRESH_K3S_CERTS=/boot/refresh-k3s-certs
 
 if [[ -f $PATH_GITHUB_USERNAME ]]; then
     set -e
@@ -89,14 +91,14 @@ if [[ -f $PATH_GITHUB_USERNAME ]]; then
     echo "Skipping GitHub SSH key installation, $PATH_GITHUB_USERNAME does not exist or is blank"
 fi
 
-if [[ -f $PATH_SSH_CERTS ]]; then
+if [[ -f $PATH_REFRESH_SSH_CERTS ]]; then
     echo "Generating new SSH host certs"
     rm /etc/ssh/ssh_host_*
     dpkg-reconfigure openssh-server
-    rm $PATH_SSH_CERTS
+    rm $PATH_REFRESH_SSH_CERTS
 fi
 
-if [[ -f $PATH_K3S_CERTS ]]; then
+if [[ -f $PATH_REFRESH_K3S_CERTS ]]; then
     echo "Generating new K3s certs"
 
     APISERVER_TIMEOUT=60 # Wait n seconds for k3s apiserver to start
@@ -120,7 +122,10 @@ if [[ -f $PATH_K3S_CERTS ]]; then
         /etc/rancher/k3s/k3s.yaml \
         /var/lib/rancher/k3s/server/tls
     service k3s start
-    rm $PATH_K3S_CERTS
+    rm $PATH_REFRESH_K3S_CERTS
+
+    kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.7.1/cert-manager.yaml
+    # TODO install kubesail agent with initial (non-authed) config
 fi
 EOF
 chmod +x /opt/kubesail/pibox-first-boot.sh
