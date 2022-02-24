@@ -47,7 +47,7 @@ if [[ "$(vgdisplay ${VG_GROUP_NAME})" == "" && "${DISKS_TO_ADD}" != "" ]]; then
   # Enable "fast_commit" https://www.phoronix.com/scan.php?page=news_item&px=EXT4-Fast-Commit-Queued
   tune2fs -O fast_commit "/dev/${VG_GROUP_NAME}/k3s"
   # Run a filesystem check to make sure things are OK
-  e2fsck -f "/dev/${VG_GROUP_NAME}/k3s"
+  e2fsck -p -f "/dev/${VG_GROUP_NAME}/k3s"
   # Add the mount location to /etc/fstab - note that we use data=ordered and journaling, which is potentially
   # slower than 'data=writeback' and `mkfs.ext4 -O ^has_journal`, but safer and more durable against crashes and power-loss
   # fast_commit above helps keep this from being too much of a slowdown
