@@ -81,6 +81,6 @@ elif [[ "${DISKS_TO_ADD}" != "" ]]; then
   lvextend -L100%FREE /dev/${VG_GROUP_NAME}/k3s
   resize2fs /dev/${VG_GROUP_NAME}/k3s
 else
-  echo "No disks to format, continuing"
+  echo "No disks to format, continuing. DISKS_TO_ADD was: ${DISKS_TO_ADD}"
 fi
 
