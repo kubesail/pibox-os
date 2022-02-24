@@ -15,7 +15,7 @@ for DISK in /dev/sda /dev/sdb /dev/sdc /dev/sdd /dev/sde; do
       # Format the disk as one large Linux partition and create the PV
       echo 'type=83' | sfdisk "${DISK}"
       echo n | pvcreate -q "${DISK}1" && {
-        DISKS_TO_ADD="${DISKS_TO_ADD} ${DISK}1"
+        DISKS_TO_ADD="${DISK}1 ${DISKS_TO_ADD}"
       }
     fi
   fi
@@ -23,7 +23,7 @@ done
 
 # If our VirtualGroup doesn't exist, let's provision for the first time:
 if [[ "$(vgdisplay ${VG_GROUP_NAME})" == "" && "${DISKS_TO_ADD}" != "" ]]; then
-  vgcreate "${VG_GROUP_NAME}" "${DISKS_TO_ADD}"
+  vgcreate "${VG_GROUP_NAME}" ${DISKS_TO_ADD}
   # Use 100% of available space
   lvcreate -n k3s -l 100%FREE "${VG_GROUP_NAME}"
   # Create a new EXT4 filesystem with zero reserved space
@@ -56,7 +56,7 @@ if [[ "$(vgdisplay ${VG_GROUP_NAME})" == "" && "${DISKS_TO_ADD}" != "" ]]; then
   fi
 elif [[ "${DISKS_TO_ADD}" != "" ]]; then
   echo "Extending disk array, adding: ${DISKS_TO_ADD}"
-  vgextend "${VG_GROUP_NAME}" "${DISKS_TO_ADD}"
+  vgextend "${VG_GROUP_NAME}" ${DISKS_TO_ADD}
   lvextend -L100%FREE /dev/${VG_GROUP_NAME}/k3s
   resize2fs /dev/${VG_GROUP_NAME}/k3s
 else
