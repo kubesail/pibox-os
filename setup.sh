@@ -51,7 +51,7 @@ fi
 
 echo $KUBESAIL_USERNAME > /boot/kubesail-username.txt
 
-read -p "Do you want to install your public GitHub keys for SSH access? [Y/n] " GITHUB_SSH
+read -p "Do you want to install your public GitHub keys for SSH access? NOTE: This will disable SSH password logins. [Y/n] " GITHUB_SSH
 GITHUB_SSH=${GITHUB_SSH:-Y}
 
 if [ $GITHUB_SSH = "Y" ]; then
