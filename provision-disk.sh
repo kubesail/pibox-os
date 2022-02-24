@@ -9,14 +9,15 @@ VG_GROUP_NAME="pibox-group"
 DISKS_TO_ADD=""
 
 # To undo this entire script or to test:
-#  umount /var/lib/rancher
-#  umount /var/lib/rancher-ssd
-#  wipefs -af /dev/pibox-group/k3s
-#  lvremove /dev/pibox-group/k3s
-#  vgremove pibox-group
-#  pvremove /dev/sda1
-#  fdisk /dev/sda # delete /dev/sda1
-#  wipefs -a /dev/sda
+# service k3s stop
+# umount -l /var/lib/rancher
+# umount -l /var/lib/rancher-ssd
+# wipefs -af /dev/pibox-group/k3s
+# lvremove /dev/pibox-group/k3s
+# vgremove pibox-group
+# pvremove /dev/sda1
+# sfdisk -d /dev/sda1
+# wipefs -a /dev/sda
 
 # For each of the possible 5 disks installed
 for DISK in /dev/sda /dev/sdb /dev/sdc /dev/sdd /dev/sde; do

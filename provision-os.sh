@@ -58,7 +58,7 @@ sed -i 's/vm.swappiness=.*/vm.swappiness=1/' /etc/sysctl.conf
 
 # Install K3s
 if [[ ! -d /var/lib/rancher/k3s/data ]]; then
-  curl -sfL https://get.k3s.io | INSTALL_K3S_CHANNEL=latest sh
+  curl -sfL https://get.k3s.io | INSTALL_K3S_CHANNEL=stable sh
 fi
 
 # Install helm
@@ -76,6 +76,9 @@ chmod +x provision-disk.sh
 mkdir -p /etc/systemd/system/k3s.service.d
 echo -e "[Service]\nExecStartPre=/root/provision-disk.sh" > /etc/systemd/system/k3s.service.d/override.conf
 systemctl daemon-reload
+
+# Show text output during startup / shutdown (useful if reboot hangs)
+sudo sed -i 's/quiet splash plymouth.ignore-serial-consoles//' /boot/cmdline.txt
 
 # Refresh certs on first boot
 touch /boot/refresh-ssh-certs
