@@ -67,7 +67,7 @@ if [[ "$(vgdisplay ${VG_GROUP_NAME})" == "" && "${DISKS_TO_ADD}" != "" ]]; then
     mount /dev/${VG_GROUP_NAME}/k3s
     # Cleanup old dir
     rm -rf /var/lib/rancher-ssd
-    service k3s start
+    echo "You may need to start k3s again with 'service k3s start', if you ran this script manually."
   else
     mkdir /var/lib/rancher
     mount /dev/${VG_GROUP_NAME}/k3s
