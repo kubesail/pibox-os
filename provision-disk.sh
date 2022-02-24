@@ -16,7 +16,7 @@ DISKS_TO_ADD=""
 # lvremove /dev/pibox-group/k3s
 # vgremove pibox-group
 # pvremove /dev/sda1
-# sfdisk -d /dev/sda1
+# sfdisk --delete /dev/sda 1
 # wipefs -a /dev/sda
 
 echo "Running provision-disk.sh"
