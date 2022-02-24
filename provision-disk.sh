@@ -44,11 +44,15 @@ if [[ "$(vgdisplay ${VG_GROUP_NAME})" == "" && "${DISKS_TO_ADD}" != "" ]]; then
     mkdir -p /var/lib/rancher-ssd
     mount /dev/${VG_GROUP_NAME}/k3s /var/lib/rancher-ssd
     # Copy k3s into temp dir
-    rsync -aqxP /var/lib/rancher/* /var/lib/rancher-ssd && rm -rf /var/lib/rancher
-    # Move directories back into place and cleanup
+    rsync -aqxP /var/lib/rancher/* /var/lib/rancher-ssd
+    # Remove old rancher dir
+    rm -rf /var/lib/rancher
+    # Unmount disk
     umount -l /var/lib/rancher-ssd
-    mkdir /var/lib/rancher
+    # Mount volume
+    mkdir -p /var/lib/rancher
     mount /dev/${VG_GROUP_NAME}/k3s
+    # Cleanup old dir
     rm -rf /var/lib/rancher-ssd
   else
     mkdir /var/lib/rancher
