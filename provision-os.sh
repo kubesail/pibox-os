@@ -44,6 +44,9 @@ service sshd restart
 
 # Kernel settings
 grep -qxF 'cgroup_enable=memory cgroup_memory=1' /boot/cmdline.txt || sed -i 's/$/ cgroup_enable=memory cgroup_memory=1/' /boot/cmdline.txt
+
+reboot now
+
 echo "dtoverlay=spi0-1cs" >> /boot/config.txt
 echo "dtoverlay=dwc2,dr_mode=host" >> /boot/config.txt
 
@@ -66,11 +69,12 @@ chmod +x /usr/local/bin/helm
 rm -rf linux-arm64 helm.tar.gz
 
 # Pibox Disk Provisioner - Note, this script will potentially format attached disks. Careful!
-curl -sLo pibox-disk-provisioner.sh https://docs.kubesail.com/static/pibox-disk-provisioner.sh
-chmod +x pibox-disk-provisioner.sh
-./pibox-disk-provisioner.sh
+curl -sLo provision-disk.sh https://raw.githubusercontent.com/kubesail/pibox-os/main/provision-disk.sh
+chmod +x provision-disk.sh
+./provision-disk.sh
 # Run disk provisioner before K3s starts
-sed -i '/^\[Service\]/a ExecStartPre=/root/pibox-disk-provisioner.sh' /etc/systemd/system/k3s.service
+mkdir -p /etc/systemd/system/k3s.service.d
+echo -e "[Service]\nExecStartPre=/root/provision-disk.sh" > /etc/systemd/system/k3s.service.d/override.conf
 systemctl daemon-reload
 
 # Refresh certs on first boot
