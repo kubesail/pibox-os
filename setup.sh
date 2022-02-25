@@ -120,6 +120,7 @@ if [[ -f $PATH_REFRESH_K3S_CERTS ]]; then
     rm -vrf /var/lib/rancher/k3s/agent/*.key \
         /var/lib/rancher/k3s/agent/*.crt \
         /etc/rancher/k3s/k3s.yaml \
+        /var/lib/rancher/k3s/server/token \
         /var/lib/rancher/k3s/server/tls
     service k3s start
     rm $PATH_REFRESH_K3S_CERTS
