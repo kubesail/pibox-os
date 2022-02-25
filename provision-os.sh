@@ -71,17 +71,27 @@ chmod +x /usr/local/bin/helm
 rm -rf linux-arm64 helm.tar.gz
 
 # Pibox Disk Provisioner - Note, this script will potentially format attached disks. Careful!
-curl -sLo provision-disk.sh https://raw.githubusercontent.com/kubesail/pibox-os/main/provision-disk.sh
-chmod +x provision-disk.sh
-./provision-disk.sh
+mkdir -p /opt/kubesail/
+curl -sLo /opt/kubesail/provision-disk.sh https://raw.githubusercontent.com/kubesail/pibox-os/main/provision-disk.sh
+chmod +x /opt/kubesail/provision-disk.sh
+/opt/kubesail/./provision-disk.sh
 # Run disk provisioner before K3s starts
 mkdir -p /etc/systemd/system/k3s.service.d
-echo -e "[Service]\nExecStartPre=/root/provision-disk.sh" > /etc/systemd/system/k3s.service.d/override.conf
+echo -e "[Service]\nExecStartPre=/opt/kubesail/provision-disk.sh" > /etc/systemd/system/k3s.service.d/override.conf
 systemctl daemon-reload
+
+# Install KubeSail helper services
+curl -s https://raw.githubusercontent.com/kubesail/pibox-os/main/setup.sh | sudo bash
+# now you can run `kubesail` to initialize the KubeSail agent at any time
 
 # Refresh certs on first boot
 touch /boot/refresh-ssh-certs
 touch /boot/refresh-k3s-certs
 
+# Reset password back to "raspberrypi"
+passwd pi
+
 # Clean bash history
-history -c
+history -c && history -w
+# ctrl+d and do the same for pi user
+history -c && history -w
