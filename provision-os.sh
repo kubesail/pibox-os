@@ -44,11 +44,13 @@ service sshd restart
 
 # Kernel settings
 grep -qxF 'cgroup_enable=memory cgroup_memory=1' /boot/cmdline.txt || sed -i 's/$/ cgroup_enable=memory cgroup_memory=1/' /boot/cmdline.txt
-
-reboot now
+# Show text output during startup / shutdown (useful if reboot hangs)
+sudo sed -i 's/quiet splash plymouth.ignore-serial-consoles//' /boot/cmdline.txt
 
 echo "dtoverlay=spi0-1cs" >> /boot/config.txt
 echo "dtoverlay=dwc2,dr_mode=host" >> /boot/config.txt
+
+reboot now
 
 # Swap
 swapoff -a
@@ -76,9 +78,6 @@ chmod +x provision-disk.sh
 mkdir -p /etc/systemd/system/k3s.service.d
 echo -e "[Service]\nExecStartPre=/root/provision-disk.sh" > /etc/systemd/system/k3s.service.d/override.conf
 systemctl daemon-reload
-
-# Show text output during startup / shutdown (useful if reboot hangs)
-sudo sed -i 's/quiet splash plymouth.ignore-serial-consoles//' /boot/cmdline.txt
 
 # Refresh certs on first boot
 touch /boot/refresh-ssh-certs
