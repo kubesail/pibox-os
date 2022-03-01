@@ -28,18 +28,18 @@ Vagrant.configure("2") do |config|
     [[ -e /tmp/go ]] && rm -rf /tmp/go*
     sudo apt-get remove -yqq 'golang-*'
     cd /tmp
-    wget -q https://dl.google.com/go/go1.14.3.linux-amd64.tar.gz
-    tar xf go1.14.3.linux-amd64.tar.gz
-    cp -r go /usr/lib/go-1.14
+    wget -q https://go.dev/dl/go1.16.14.linux-amd64.tar.gz
+    tar xf go1.16.14.linux-amd64.tar.gz
+    cp -r go /usr/lib/go-1.16
     rm -rf /tmp/go*
 
     # Set GO paths for vagrant user
-    echo 'export GOROOT=/usr/lib/go-1.14
+    echo 'export GOROOT=/usr/lib/go-1.16
     export GOPATH=$HOME/work
     export PATH=$PATH:$GOROOT/bin:$GOPATH/bin' | tee -a /home/vagrant/.profile
 
     # Also set them while we work:
-    export GOROOT=/usr/lib/go-1.14
+    export GOROOT=/usr/lib/go-1.16
     export GOPATH=$HOME/work
     export PATH=$PATH:$GOROOT/bin:$GOPATH/bin
 
@@ -56,11 +56,13 @@ Vagrant.configure("2") do |config|
     cd ..
 
     mkdir -p $GOPATH/src/github.com/solo-io/
-    cd $GOPATH/src/github.com/solo-io/
+    pushd $GOPATH/src/github.com/solo-io/
     git clone https://github.com/solo-io/packer-plugin-arm-image
     cd packer-plugin-arm-image
+    go mod download
     go build
     mkdir -p /home/vagrant/.packer.d/plugins
     mv -v packer-plugin-arm-image /home/vagrant/.packer.d/plugins/
+    popd
   SHELL
 end
