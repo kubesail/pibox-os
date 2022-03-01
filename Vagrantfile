@@ -28,7 +28,7 @@ Vagrant.configure("2") do |config|
     [[ -e /tmp/go ]] && rm -rf /tmp/go*
     sudo apt-get remove -yqq 'golang-*'
     cd /tmp
-    wget https://dl.google.com/go/go1.14.3.linux-amd64.tar.gz
+    wget -q https://dl.google.com/go/go1.14.3.linux-amd64.tar.gz
     tar xf go1.14.3.linux-amd64.tar.gz
     cp -r go /usr/lib/go-1.14
     rm -rf /tmp/go*
@@ -51,10 +51,12 @@ Vagrant.configure("2") do |config|
         -q -O /tmp/packer_${PACKER_VERSION}_linux_amd64.zip
     cd /tmp
     unzip -u packer_${PACKER_VERSION}_linux_amd64.zip
-    cp packer /usr/local/bin
+    cp -v packer /usr/local/bin
     rm -rf /tmp/packer*
     cd ..
 
+    mkdir -p $GOPATH/src/github.com/solo-io/
+    cd $GOPATH/src/github.com/solo-io/
     git clone https://github.com/solo-io/packer-plugin-arm-image
     cd packer-plugin-arm-image
     go build
