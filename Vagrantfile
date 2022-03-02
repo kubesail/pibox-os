@@ -61,6 +61,6 @@ Vagrant.configure("2") do |config|
     cd packer-plugin-arm-image
     go mod download
     go build
-    mv -v packer-plugin-arm-image /home/vagrant/
+    mv -v packer-plugin-arm-image /vagrant/
   SHELL
 end

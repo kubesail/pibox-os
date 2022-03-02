@@ -56,5 +56,4 @@ dphys-swapfile swapoff
 sysctl -w vm.swappiness=1
 sed -i 's/vm.swappiness=.*/vm.swappiness=1/' /etc/sysctl.conf
 
-/sbin/reboot now
-
+# reboot -f

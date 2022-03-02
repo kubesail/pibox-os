@@ -2,7 +2,7 @@
 
 # Install K3s
 if [[ ! -d /var/lib/rancher/k3s/data ]]; then
-  curl -sfL https://get.k3s.io | INSTALL_K3S_CHANNEL=stable sh
+  curl -sfL https://get.k3s.io | INSTALL_K3S_SKIP_START=true INSTALL_K3S_CHANNEL=stable sh
 fi
 
 # Install helm
@@ -23,7 +23,7 @@ echo -e "[Service]\nExecStartPre=/opt/kubesail/provision-disk.sh" > /etc/systemd
 systemctl daemon-reload
 
 # Install KubeSail helper services
-curl -s https://raw.githubusercontent.com/kubesail/pibox-os/main/setup.sh | sudo bash
+curl -s https://raw.githubusercontent.com/kubesail/pibox-os/main/setup.sh | bash
 # now you can run `kubesail` to initialize the KubeSail agent at any time
 
 # Refresh certs on first boot
