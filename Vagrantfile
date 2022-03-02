@@ -12,7 +12,7 @@ Vagrant.configure("2") do |config|
 
   config.vm.provision "shell", inline: <<-SHELL
     export DEBIAN_FRONTEND=noninteractive
-    sudo apt-get update -yqq && sudo apt-get install -yqq bash curl git net-tools software-properties-common
+    sudo apt-get update -yqq && sudo apt-get install -yqq bash curl pigz git net-tools software-properties-common
     sudo apt-get install -yqq \
         kpartx \
         qemu-user-static \

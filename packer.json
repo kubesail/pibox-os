@@ -4,16 +4,29 @@
     {
       "type": "arm-image",
       "iso_url": "https://downloads.raspberrypi.org/raspios_arm64/images/raspios_arm64-2022-01-28/2022-01-28-raspios-bullseye-arm64.zip",
-      "iso_checksum": "sha256:c6f583fab8ed8d84bdf272d095c821fa70d2a0b434ba78432648f69b661d3783"
+      "iso_checksum": "sha256:c6f583fab8ed8d84bdf272d095c821fa70d2a0b434ba78432648f69b661d3783",
+      "last_partition_extra_size": 524288000
     }
   ],
   "provisioners": [
     {
       "type": "shell",
-      "inline": [
-        "apt-get update",
-        "apt-get install -y golang"
-      ]
+      "script": "provision-os.sh",
+      "expect_disconnect": true
+    },
+    {
+      "type": "shell",
+      "script": "provision-os-step2.sh",
+      "pause_before": 30
     }
+  ],
+  "post-processors": [
+    [
+      {
+        "type": "compress",
+        "keep_input_artifact": false,
+        "output": "pibox-img.zip"
+      }
+    ]
   ]
 }
