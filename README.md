@@ -42,3 +42,11 @@ To make the fan quiet and only spin as fast as necessary, we install a service t
 ## LCD display
 
 The python code used to render stats to the LCD display lives in the [lcd-display](lcd-display) directory. More info can be found on the PiBox docs: https://docs.kubesail.com/guides/pibox/os/#enabling-the-13-lcd-display
+
+## Building ISO for release
+
+The following commands builds the pibox OS image
+
+    vagrant up
+    vagrant ssh
+    sudo -E packer build packer.json
