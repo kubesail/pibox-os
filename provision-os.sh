@@ -20,7 +20,7 @@ apt-get update -yqq
 apt-get full-upgrade -yqq
 apt-get autoremove -yqq
 apt-get autoclean -yqq
-apt-get install -yqq vim lvm2
+apt-get install -yqq vim lvm2 openssh-server
 
 # Reduce logging and store in memory to reduce EMMC wear
 sed -i 's/.MaxLevelStore.*/MaxLevelStore=info/' /etc/systemd/journald.conf
@@ -40,12 +40,12 @@ git clone https://github.com/kubesail/pibox-os.git && \
 
 # SSH Config
 echo "TCPKeepAlive yes" >> /etc/ssh/sshd_config
-service sshd restart
+touch /boot/ssh
 
 # Kernel settings
 grep -qxF 'cgroup_enable=memory cgroup_memory=1' /boot/cmdline.txt || sed -i 's/$/ cgroup_enable=memory cgroup_memory=1/' /boot/cmdline.txt
 # Show text output during startup / shutdown (useful if reboot hangs)
-sudo sed -i 's/quiet splash plymouth.ignore-serial-consoles//' /boot/cmdline.txt
+sed -i 's/quiet splash plymouth.ignore-serial-consoles//' /boot/cmdline.txt
 
 echo "dtoverlay=spi0-1cs" >> /boot/config.txt
 echo "dtoverlay=dwc2,dr_mode=host" >> /boot/config.txt
@@ -56,5 +56,5 @@ dphys-swapfile swapoff
 sysctl -w vm.swappiness=1
 sed -i 's/vm.swappiness=.*/vm.swappiness=1/' /etc/sysctl.conf
 
-reboot now
+/sbin/reboot now
 

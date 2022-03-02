@@ -56,13 +56,11 @@ Vagrant.configure("2") do |config|
     cd ..
 
     mkdir -p $GOPATH/src/github.com/solo-io/
-    pushd $GOPATH/src/github.com/solo-io/
+    cd $GOPATH/src/github.com/solo-io/
     git clone https://github.com/solo-io/packer-plugin-arm-image
     cd packer-plugin-arm-image
     go mod download
     go build
-    mkdir -p /home/vagrant/.packer.d/plugins
-    mv -v packer-plugin-arm-image /home/vagrant/.packer.d/plugins/
-    popd
+    mv -v packer-plugin-arm-image /home/vagrant/
   SHELL
 end
