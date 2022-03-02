@@ -33,7 +33,7 @@ touch /boot/refresh-k3s-certs
 # Reset password back to "raspberrypi"
 passwd pi
 
-/usr/lib/raspi-config/init_resize.sh
+echo -n " init=/usr/lib/raspi-config/init_resize.sh" > cmdline.txt
 
 # Clean bash history
 history -c && history -w
