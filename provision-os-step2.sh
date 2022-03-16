@@ -38,8 +38,8 @@ echo -n " init=/usr/lib/raspi-config/init_resize.sh" >> /boot/cmdline.txt
 
 # Clean bash history
 history -c && history -w
-logout
+exit
 
 # logout of root and do the same for pi user
 history -c && history -w
-logout
+exit
