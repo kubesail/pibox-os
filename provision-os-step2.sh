@@ -31,7 +31,7 @@ touch /boot/refresh-ssh-certs
 touch /boot/refresh-k3s-certs
 
 # Reset password back to "raspberrypi"
-passwd pi
+# passwd pi
 
 echo -n " init=/usr/lib/raspi-config/init_resize.sh" > cmdline.txt
 
