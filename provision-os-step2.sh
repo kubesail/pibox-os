@@ -33,9 +33,13 @@ touch /boot/refresh-k3s-certs
 # Reset password back to "raspberrypi"
 # passwd pi
 
+truncate -s-1 /boot/cmdline.txt
 echo -n " init=/usr/lib/raspi-config/init_resize.sh" >> /boot/cmdline.txt
 
 # Clean bash history
 history -c && history -w
-# ctrl+d and do the same for pi user
+logout
+
+# logout of root and do the same for pi user
 history -c && history -w
+logout
