@@ -12,6 +12,15 @@ mv linux-arm64/helm /usr/local/bin/
 chmod +x /usr/local/bin/helm
 rm -rf linux-arm64 helm.tar.gz
 
+# remove k3s secret and stop service
+k3s kubectl --insecure-skip-tls-verify -n kube-system delete secret k3s-serving
+service k3s stop
+rm -vrf /var/lib/rancher/k3s/agent/*.key \
+    /var/lib/rancher/k3s/agent/*.crt \
+    /etc/rancher/k3s/k3s.yaml \
+    /var/lib/rancher/k3s/server/token \
+    /var/lib/rancher/k3s/server/tls
+
 # Pibox Disk Provisioner - Note, this script will potentially format attached disks. Careful!
 mkdir -p /opt/kubesail/
 curl -sLo /opt/kubesail/provision-disk.sh https://raw.githubusercontent.com/kubesail/pibox-os/main/provision-disk.sh
