@@ -12,7 +12,7 @@ mv linux-arm64/helm /usr/local/bin/
 chmod +x /usr/local/bin/helm
 rm -rf linux-arm64 helm.tar.gz
 
-# remove k3s secret and stop service
+# Stop K3s, remove certs to get regenerated on next boot
 k3s kubectl --insecure-skip-tls-verify -n kube-system delete secret k3s-serving
 service k3s stop
 rm -vrf /var/lib/rancher/k3s/agent/*.key \
@@ -35,9 +35,8 @@ systemctl daemon-reload
 curl -s https://raw.githubusercontent.com/kubesail/pibox-os/main/setup.sh | bash
 # now you can run `kubesail` to initialize the KubeSail agent at any time
 
-# Refresh certs on first boot
+# Refresh SSH certs on first boot
 touch /boot/refresh-ssh-certs
-touch /boot/refresh-k3s-certs
 
 # Reset password back to "raspberrypi"
 # passwd pi
