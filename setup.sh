@@ -73,7 +73,6 @@ cat <<'EOF' > /opt/kubesail/pibox-first-boot.sh
 #!/bin/bash
 PATH_GITHUB_USERNAME=/boot/github-ssh-username.txt
 PATH_REFRESH_SSH_CERTS=/boot/refresh-ssh-certs
-PATH_REFRESH_K3S_CERTS=/boot/refresh-k3s-certs
 
 if [[ -f $PATH_GITHUB_USERNAME ]]; then
     set -e
@@ -98,36 +97,6 @@ if [[ -f $PATH_REFRESH_SSH_CERTS ]]; then
     rm $PATH_REFRESH_SSH_CERTS
 fi
 
-if [[ -f $PATH_REFRESH_K3S_CERTS ]]; then
-    echo "Generating new K3s certs"
-
-    APISERVER_TIMEOUT=60 # Wait n seconds for k3s apiserver to start
-    for i in $(seq 1 $APISERVER_TIMEOUT); do 
-        APISERVER_STATUS="$(curl -s -o /dev/null -w "%{http_code}" --max-time 5 -k https://localhost:6443)"
-        echo $APISERVER_STATUS
-        if [ $APISERVER_STATUS == "401" ]; then
-            break
-        fi
-        sleep 1
-    done
-    if [ $APISERVER_STATUS != "401" ]; then
-        echo "Timeout waiting for k3s apiserver to start"
-        exit 1
-    fi
-
-    k3s kubectl --insecure-skip-tls-verify -n kube-system delete secret k3s-serving
-    service k3s stop
-    rm -vrf /var/lib/rancher/k3s/agent/*.key \
-        /var/lib/rancher/k3s/agent/*.crt \
-        /etc/rancher/k3s/k3s.yaml \
-        /var/lib/rancher/k3s/server/token \
-        /var/lib/rancher/k3s/server/tls
-    service k3s start
-    rm $PATH_REFRESH_K3S_CERTS
-
-    kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.7.1/cert-manager.yaml
-    # TODO install kubesail agent with initial (non-authed) config
-fi
 EOF
 chmod +x /opt/kubesail/pibox-first-boot.sh
 
