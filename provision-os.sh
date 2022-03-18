@@ -1,4 +1,10 @@
 #!/bin/bash
+set -e 
+
+if [ "$EUID" -ne 0 ]
+  then echo "Please run as root"
+  exit
+fi
 
 hostnamectl set-hostname pibox
 sed -i 's/raspberrypi/pibox/' /etc/hosts
