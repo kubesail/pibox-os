@@ -3,7 +3,7 @@ set -e
 
 # Install K3s
 if [[ ! -d /var/lib/rancher/k3s/data ]]; then
-  curl -sfL https://get.k3s.io | INSTALL_K3S_SKIP_START=true INSTALL_K3S_CHANNEL=stable sh
+  curl -sfL https://get.k3s.io | INSTALL_K3S_CHANNEL=stable sh
 fi
 
 # Install helm
@@ -12,21 +12,6 @@ tar zxf helm.tar.gz
 mv linux-arm64/helm /usr/local/bin/
 chmod +x /usr/local/bin/helm
 rm -rf linux-arm64 helm.tar.gz
-
-APISERVER_TIMEOUT=60 # Wait n seconds for k3s apiserver to start
-for i in $(seq 1 $APISERVER_TIMEOUT); do 
-    APISERVER_STATUS="$(curl -s -o /dev/null -w "%{http_code}" --max-time 5 -k https://localhost:6443)"
-    echo $APISERVER_STATUS
-    if [ $APISERVER_STATUS == "401" ]; then
-        break
-    fi
-    sleep 1
-done
-if [ $APISERVER_STATUS != "401" ]; then
-    echo "!!! Timeout waiting for k3s apiserver to start !!!"
-    echo "!!! PROVISION DID NOT COMPLETE !!!"
-    exit 1
-fi
 
 # Stop K3s, remove certs to get regenerated on next boot
 k3s kubectl --insecure-skip-tls-verify -n kube-system delete secret k3s-serving
