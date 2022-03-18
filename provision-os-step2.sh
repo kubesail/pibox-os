@@ -1,6 +1,11 @@
 #!/bin/bash
 set -e
 
+if [ "$EUID" -ne 0 ]
+  then echo "Please run as root"
+  exit
+fi
+
 # Install K3s
 if [[ ! -d /var/lib/rancher/k3s/data ]]; then
   curl -sfL https://get.k3s.io | INSTALL_K3S_CHANNEL=stable sh
