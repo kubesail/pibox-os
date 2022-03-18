@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e
 
 # Install K3s
 if [[ ! -d /var/lib/rancher/k3s/data ]]; then
