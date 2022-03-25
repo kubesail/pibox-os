@@ -97,6 +97,12 @@ if [[ -f $PATH_REFRESH_SSH_CERTS ]]; then
     rm $PATH_REFRESH_SSH_CERTS
 fi
 
+
+# Install K3s
+if [[ ! -d /var/lib/rancher/k3s/data ]]; then
+  curl -sfL https://get.k3s.io | INSTALL_K3S_CHANNEL=stable sh
+fi
+
 EOF
 chmod +x /opt/kubesail/pibox-first-boot.sh
 
