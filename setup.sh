@@ -11,7 +11,7 @@ if [[ ! -f /boot/kubesail-username.txt ]]; then
 fi
 
 APISERVER_TIMEOUT=60 # Wait n seconds for k3s apiserver to start
-for i in $(seq 1 $APISERVER_TIMEOUT); do 
+for i in $(seq 1 $APISERVER_TIMEOUT); do
     APISERVER_STATUS="$(curl -s -o /dev/null -w "%{http_code}" --max-time 5 -k https://localhost:6443)"
     echo $APISERVER_STATUS
     if [ $APISERVER_STATUS == "401" ]; then
@@ -67,6 +67,43 @@ echo "Installing KubeSail agent. Please wait..."
 systemctl start kubesail-init.service
 EOF
 chmod +x /usr/local/bin/kubesail
+
+# Install KubeSail Debug helper
+cat <<'EOF' > /usr/local/bin/kubesail-support
+#!/bin/bash
+
+TMPFILE="$(mktemp)"
+KUBESAIL_AGENT_KEY="$(sudo kubectl -n kubesail-agent get pods -o yaml | fgrep KUBESAIL_AGENT_KEY -A1 | tail -n1 | awk '{print $2}')"
+
+if [ -f /etc/pibox-release ]; then
+    echo -e "\n\nPiBox version ==============" >> ${TMPFILE}
+    cat /etc/pibox-release >> ${TMPFILE}
+fi
+if [ -f /etc/os-release ]; then
+    echo -e "\n\nOS version ==============" >> ${TMPFILE}
+    cat /etc/os-release >> ${TMPFILE}
+fi
+echo -e "\n\nKernel ==============\n $(uname -a)" >> ${TMPFILE}
+echo -e "\n\nkubectl version ==============" >> ${TMPFILE}
+kubectl version >> ${TMPFILE}
+echo -e "\n\nk3s check-config ==============" >> ${TMPFILE}
+k3s check-config >> ${TMPFILE}
+echo -e "\n\nkubectl get nodes ==============" >> ${TMPFILE}
+kubectl get nodes >> ${TMPFILE}
+echo -e "\n\nkubectl -n kube-system get pods ==============" >> ${TMPFILE}
+kubectl -n kube-system get pods >> ${TMPFILE}
+echo -e "\n\nkubectl -n kubesail-agent describe pods ==============" >> ${TMPFILE}
+kubectl -n kubesail-agent describe pods >> ${TMPFILE}
+echo -e "\n\nkubectl -n kubesail-agent logs -l app=kubesail-agent ==============" >> ${TMPFILE}
+kubectl -n kubesail-agent logs -l app=kubesail-agent >> ${TMPFILE}
+echo "Wrote logs to ${TMPFILE}"
+gzip ${TMPFILE}
+curl -s -H "Content-Type: application/json" -k -X POST --data-binary @${TMPFILE}.gz "https://192.168.100.162:4000/agent/upload-debug-logs/${KUBESAIL_AGENT_KEY}"
+echo -e "\nUploaded logs to KubeSail-Support - thank you"
+
+EOF
+chmod +x /usr/local/bin/kubesail-support
+
 
 # Install PiBox first boot script
 cat <<'EOF' > /opt/kubesail/pibox-first-boot.sh

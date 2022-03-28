@@ -1,5 +1,5 @@
 #!/bin/bash
-set -e 
+set -e
 
 if [ "$EUID" -ne 0 ]
   then echo "Please run as root"
@@ -42,7 +42,7 @@ git clone https://github.com/kubesail/pibox-os.git && \
   cd pibox-os/pwm-fan && \
   tar zxvf bcm2835-1.68.tar.gz && cd bcm2835-1.68 && \
   ./configure && make && make install && cd ../ && \
-  make && make install && cd ../.. && rm -rf pibox-os
+  make && make install && echo "PIBOX_RELEASE=$(git rev-parse --short HEAD)" > /etc/pibox-release && cd ../.. && rm -rf pibox-os
 
 # SSH Config
 echo "TCPKeepAlive yes" >> /etc/ssh/sshd_config
