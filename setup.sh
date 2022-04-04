@@ -167,8 +167,14 @@ EOF
 
 # Install PiBox framebuffer service
 mkdir -p /var/run/pibox
-curl -sLo /var/run/pibox/pibox-framebuffer https://github.com/kubesail/pibox-framebuffer/releases/download/v1/pibox-framebuffer
-chmod +x /var/run/pibox/pibox-framebuffer
+chmod 777 /var/run/pibox
+FB_VERSION=v1
+FB_PATH=/var/run/pibox/pibox-framebuffer-$FB_VERSION
+if [[ ! -f $FB_PATH ]]; then
+    curl --connect-timeout 10 -sLo $FB_PATH https://github.com/kubesail/pibox-framebuffer/releases/download/$FB_VERSION/pibox-framebuffer
+    chmod +x $FB_PATH
+    ln -s $FB_PATH /var/run/pibox/pibox-framebuffer
+fi
 cat <<'EOF' > /etc/systemd/system/pibox-framebuffer.service
 [Service]
 ExecStart=/var/run/pibox/pibox-framebuffer
