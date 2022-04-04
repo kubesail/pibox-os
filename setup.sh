@@ -165,9 +165,24 @@ ExecStart=/opt/kubesail/pibox-first-boot.sh
 WantedBy=default.target
 EOF
 
+# Install PiBox framebuffer service
+mkdir -p /var/run/pibox
+curl -sLo /var/run/pibox/pibox-framebuffer https://github.com/kubesail/pibox-framebuffer/releases/download/v1/pibox-framebuffer
+chmod +x /var/run/pibox/pibox-framebuffer
+cat <<'EOF' > /etc/systemd/system/pibox-framebuffer.service
+[Service]
+ExecStart=/var/run/pibox/pibox-framebuffer
+Restart=on-failure
+RestartSec=5s
+[Install]
+WantedBy=default.target
+EOF
+
 systemctl daemon-reload
 
 systemctl enable pibox-first-boot.service
 systemctl start pibox-first-boot.service
 systemctl enable kubesail-init.service
 systemctl start kubesail-init.service
+systemctl enable pibox-framebuffer.service
+systemctl start pibox-framebuffer.service
