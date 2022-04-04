@@ -166,8 +166,8 @@ WantedBy=default.target
 EOF
 
 # Install PiBox framebuffer service
+useradd -u 989 --system --shell=/usr/sbin/nologin kubesail-agent
 mkdir -p /var/run/pibox
-chmod 777 /var/run/pibox
 FB_VERSION=v1
 FB_PATH=/var/run/pibox/pibox-framebuffer-$FB_VERSION
 if [[ ! -f $FB_PATH ]]; then
@@ -175,6 +175,7 @@ if [[ ! -f $FB_PATH ]]; then
     chmod +x $FB_PATH
     ln -s $FB_PATH /var/run/pibox/pibox-framebuffer
 fi
+chown -R kubesail-agent: /var/run/pibox
 cat <<'EOF' > /etc/systemd/system/pibox-framebuffer.service
 [Service]
 ExecStart=/var/run/pibox/pibox-framebuffer
