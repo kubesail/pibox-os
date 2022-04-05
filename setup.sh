@@ -1,7 +1,8 @@
 #!/bin/bash
 
+useradd -u 989 --system --shell=/usr/sbin/nologin kubesail-agent
 mkdir -p /opt/kubesail/
-chown kubesail-agent: .
+chown kubesail-agent: /opt/kubesail/
 
 # Install KubeSail init script
 cat <<'EOF' > /opt/kubesail/init.sh
@@ -167,19 +168,16 @@ WantedBy=default.target
 EOF
 
 # Install PiBox framebuffer service
-useradd -u 989 --system --shell=/usr/sbin/nologin kubesail-agent
-mkdir -p /var/run/pibox
 FB_VERSION=v4
-FB_PATH=/var/run/pibox/pibox-framebuffer-$FB_VERSION
+FB_PATH=/opt/kubesail/pibox-framebuffer-$FB_VERSION
 if [[ ! -f $FB_PATH ]]; then
     curl --connect-timeout 10 -sLo $FB_PATH https://github.com/kubesail/pibox-framebuffer/releases/download/$FB_VERSION/pibox-framebuffer
     chmod +x $FB_PATH
-    ln -s $FB_PATH /var/run/pibox/pibox-framebuffer
+    ln -s $FB_PATH /opt/kubesail/pibox-framebuffer
 fi
-chown -R kubesail-agent: /var/run/pibox
 cat <<'EOF' > /etc/systemd/system/pibox-framebuffer.service
 [Service]
-ExecStart=/var/run/pibox/pibox-framebuffer
+ExecStart=/opt/kubesail/pibox/pibox-framebuffer
 Restart=on-failure
 RestartSec=5s
 [Install]
