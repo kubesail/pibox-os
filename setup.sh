@@ -178,7 +178,7 @@ fi
 cat <<'EOF' > /etc/systemd/system/pibox-framebuffer.service
 [Service]
 ExecStart=/opt/kubesail/pibox-framebuffer
-Restart=on-failure
+Restart=always
 RestartSec=5s
 [Install]
 WantedBy=default.target
