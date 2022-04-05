@@ -168,7 +168,7 @@ EOF
 # Install PiBox framebuffer service
 useradd -u 989 --system --shell=/usr/sbin/nologin kubesail-agent
 mkdir -p /var/run/pibox
-FB_VERSION=v1
+FB_VERSION=v4
 FB_PATH=/var/run/pibox/pibox-framebuffer-$FB_VERSION
 if [[ ! -f $FB_PATH ]]; then
     curl --connect-timeout 10 -sLo $FB_PATH https://github.com/kubesail/pibox-framebuffer/releases/download/$FB_VERSION/pibox-framebuffer
