@@ -177,7 +177,7 @@ if [[ ! -f $FB_PATH ]]; then
 fi
 cat <<'EOF' > /etc/systemd/system/pibox-framebuffer.service
 [Service]
-ExecStart=/opt/kubesail/pibox/pibox-framebuffer
+ExecStart=/opt/kubesail/pibox-framebuffer
 Restart=on-failure
 RestartSec=5s
 [Install]
