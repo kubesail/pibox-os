@@ -1,7 +1,7 @@
 #!/bin/bash
 
 mkdir -p /opt/kubesail/
-chmod 777 /opt/kubesail/
+chown root:kubesail-agent .
 
 # Install KubeSail init script
 cat <<'EOF' > /opt/kubesail/init.sh
