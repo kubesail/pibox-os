@@ -140,7 +140,7 @@ fi
 # Install K3s and KubeSail agent
 if [[ ! -d /var/lib/rancher/k3s/data ]]; then
   curl -sfL https://get.k3s.io | INSTALL_K3S_CHANNEL=stable sh
-  kubectl create -f https://byoc.kubesail.com/.yaml
+  kubectl create -f https://api.kubesail.com/byoc
 fi
 
 EOF
