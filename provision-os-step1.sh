@@ -45,12 +45,7 @@ git clone https://github.com/kubesail/pibox-os.git && \
   make && make install && echo "PIBOX_RELEASE=$(git rev-parse --short HEAD)" > /etc/pibox-release && cd ../.. && rm -rf pibox-os
 
 # Display driver
-pudhd st7789_module
-make
-mv /lib/modules/`uname -r`/kernel/drivers/staging/fbtft/fb_st7789v.ko /lib/modules/`uname -r`/kernel/drivers/staging/fbtft/fb_st7789v.BACK
-mv fb_st7789v.ko /lib/modules/`uname -r`/kernel/drivers/staging/fbtft/fb_st7789v.ko
-popd
-        
+curl -s https://raw.githubusercontent.com/kubesail/pibox-os/main/setup-display.sh | bash
 
 # SSH Config
 echo "TCPKeepAlive yes" >> /etc/ssh/sshd_config
@@ -61,8 +56,6 @@ grep -qxF 'cgroup_enable=memory cgroup_memory=1' /boot/cmdline.txt || sed -i 's/
 # Show text output during startup / shutdown (useful if reboot hangs)
 sed -i 's/quiet splash plymouth.ignore-serial-consoles//' /boot/cmdline.txt
 
-echo "dtoverlay=spi0-1cs" >> /boot/config.txt
-echo "dtoverlay=dwc2,dr_mode=host" >> /boot/config.txt
 
 # Swap
 swapoff -a
