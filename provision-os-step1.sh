@@ -26,7 +26,7 @@ apt-get update -yqq
 apt-get full-upgrade -yqq
 apt-get autoremove -yqq
 apt-get autoclean -yqq
-apt-get install -yqq vim lvm2 openssh-server
+apt-get install -yqq vim lvm2 openssh-server raspberrypi-kernel-headers
 
 # Reduce logging and store in memory to reduce EMMC wear
 sed -i 's/.MaxLevelStore.*/MaxLevelStore=info/' /etc/systemd/journald.conf
