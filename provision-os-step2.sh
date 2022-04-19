@@ -37,6 +37,10 @@ touch /boot/refresh-ssh-certs
 # truncate -s-1 /boot/cmdline.txt
 # echo -n " init=/usr/lib/raspi-config/init_resize.sh" >> /boot/cmdline.txt
 
+# Disable SSH
+systemctl stop ssh
+systemctl disable ssh
+
 # Clean bash history
 history -c && history -w
 exit
