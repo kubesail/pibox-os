@@ -44,6 +44,14 @@ git clone https://github.com/kubesail/pibox-os.git && \
   ./configure && make && make install && cd ../ && \
   make && make install && echo "PIBOX_RELEASE=$(git rev-parse --short HEAD)" > /etc/pibox-release && cd ../.. && rm -rf pibox-os
 
+# Display driver
+pudhd st7789_module
+make
+mv /lib/modules/`uname -r`/kernel/drivers/staging/fbtft/fb_st7789v.ko /lib/modules/`uname -r`/kernel/drivers/staging/fbtft/fb_st7789v.BACK
+mv fb_st7789v.ko /lib/modules/`uname -r`/kernel/drivers/staging/fbtft/fb_st7789v.ko
+popd
+        
+
 # SSH Config
 echo "TCPKeepAlive yes" >> /etc/ssh/sshd_config
 touch /boot/ssh
