@@ -2,7 +2,6 @@
 
 useradd -u 989 --system --shell=/usr/sbin/nologin kubesail-agent
 mkdir -p /opt/kubesail/
-chown kubesail-agent: /opt/kubesail/
 
 # Install KubeSail init script
 cat <<'EOF' > /opt/kubesail/init.sh
@@ -176,6 +175,7 @@ if [[ ! -f $FB_PATH ]]; then
     chmod +x $FB_PATH
     ln -s $FB_PATH /opt/kubesail/pibox-framebuffer
 fi
+chown -R kubesail-agent: /opt/kubesail/
 cat <<'EOF' > /etc/systemd/system/pibox-framebuffer.service
 [Service]
 ExecStart=/opt/kubesail/pibox-framebuffer
