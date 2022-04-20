@@ -56,7 +56,7 @@ make
 mv /lib/modules/"$(uname -r)"/kernel/drivers/staging/fbtft/fb_st7789v.ko /lib/modules/"$(uname -r)"/kernel/drivers/staging/fbtft/fb_st7789v.BACK
 mv fb_st7789v.ko /lib/modules/"$(uname -r)"/kernel/drivers/staging/fbtft/fb_st7789v.ko
 popd
-dtc --warning no-unit_address_vs_reg -I dts -O dtb -o /boot/overlays/drm-minipitft13.dtbo /tmp/pibox-os/overlays/minipitft13-overlay.dts
+dtc --warning no-unit_address_vs_reg -I dts -O dtb -o /boot/overlays/drm-minipitft13.dtbo pibox-os/overlays/minipitft13-overlay.dts
 cat <<EOF >> /boot/config.txt
 dtoverlay=spi0-1cs
 dtoverlay=dwc2,dr_mode=host
@@ -81,16 +81,8 @@ dphys-swapfile swapoff
 sysctl -w vm.swappiness=1
 sed -i 's/vm.swappiness=.*/vm.swappiness=1/' /etc/sysctl.conf
 
-#!/bin/bash
-set -e
-
-if [ "$EUID" -ne 0 ]
-  then echo "Please run as root"
-  exit
-fi
-
 # Install helm
-curl -sLo helm.tar.gz https://get.helm.sh/helm-v3.7.2-linux-arm64.tar.gz
+curl -sLo helm.tar.gz https://get.helm.sh/helm-v3.8.2-linux-arm64.tar.gz
 tar zxf helm.tar.gz
 mv linux-arm64/helm /usr/local/bin/
 chmod +x /usr/local/bin/helm
