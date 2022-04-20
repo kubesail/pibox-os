@@ -28,7 +28,7 @@ curl -s https://raw.githubusercontent.com/kubesail/pibox-os/main/setup.sh | bash
 # now you can run `kubesail` to initialize the KubeSail agent at any time
 
 # Refresh SSH certs on first boot
-touch /boot/refresh-ssh-certs
+# touch /boot/refresh-ssh-certs
 
 # Reset password back to "raspberrypi"
 # passwd pi
