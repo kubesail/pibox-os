@@ -1,6 +1,6 @@
 #!/bin/bash
 git clone https://github.com/kubesail/pibox-os.git /tmp/pibox-os
-pudhd /tmp/pibox-os/st7789_module
+pushd /tmp/pibox-os/st7789_module
 make
 mv /lib/modules/"$(uname -r)"/kernel/drivers/staging/fbtft/fb_st7789v.ko /lib/modules/"$(uname -r)"/kernel/drivers/staging/fbtft/fb_st7789v.BACK
 mv fb_st7789v.ko /lib/modules/"$(uname -r)"/kernel/drivers/staging/fbtft/fb_st7789v.ko
