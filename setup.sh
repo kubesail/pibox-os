@@ -138,6 +138,7 @@ fi
 
 # Install K3s and KubeSail agent
 if [[ ! -d /var/lib/rancher/k3s/data ]]; then
+  echo "Installing k3s and KubeSail agent"
   curl -sfL https://get.k3s.io | INSTALL_K3S_CHANNEL=stable sh
   kubectl create -f https://api.kubesail.com/byoc
 fi
@@ -150,6 +151,8 @@ cat <<'EOF' > /etc/systemd/system/kubesail-init.service
 [Unit]
 After=network.service
 After=k3s.service
+After=network-online.target
+Wants=network-online.target
 [Service]
 ExecStart=/opt/kubesail/init.sh
 [Install]
@@ -161,6 +164,8 @@ EOF
 cat <<'EOF' > /etc/systemd/system/pibox-first-boot.service
 [Unit]
 After=network.service
+After=network-online.target
+Wants=network-online.target
 [Service]
 ExecStart=/opt/kubesail/pibox-first-boot.sh
 [Install]
@@ -182,14 +187,11 @@ ExecStart=/opt/kubesail/pibox-framebuffer
 Restart=always
 RestartSec=5s
 [Install]
-WantedBy=default.target
+WantedBy=multi-user.target
 EOF
 
 systemctl daemon-reload
 
 systemctl enable pibox-first-boot.service
-systemctl start pibox-first-boot.service
 systemctl enable kubesail-init.service
-systemctl start kubesail-init.service
 systemctl enable pibox-framebuffer.service
-systemctl start pibox-framebuffer.service
