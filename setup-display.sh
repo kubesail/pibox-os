@@ -1,11 +1,11 @@
 #!/bin/bash
-pudhd st7789_module
+git clone https://github.com/kubesail/pibox-os.git /tmp/pibox-os
+pudhd /tmp/pibox-os/st7789_module
 make
 mv /lib/modules/"$(uname -r)"/kernel/drivers/staging/fbtft/fb_st7789v.ko /lib/modules/"$(uname -r)"/kernel/drivers/staging/fbtft/fb_st7789v.BACK
 mv fb_st7789v.ko /lib/modules/"$(uname -r)"/kernel/drivers/staging/fbtft/fb_st7789v.ko
 popd
-curl https://raw.githubusercontent.com/kubesail/pibox-os/main/overlays/minipitft13-overlay.dts -o /tmp/overlays/minipitft13-overlay.dts
-dtc --warning no-unit_address_vs_reg -I dts -O dtb -o /boot/overlays/drm-minipitft13.dtbo /tmp/overlays/minipitft13-overlay.dts
+dtc --warning no-unit_address_vs_reg -I dts -O dtb -o /boot/overlays/drm-minipitft13.dtbo /tmp/pibox-os/overlays/minipitft13-overlay.dts
 sed -i 's/$/ fbcon=map:1/' /boot/cmdline.txt
 cat <<EOF >> /boot/config.txt
 dtoverlay=spi0-1cs
