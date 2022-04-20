@@ -74,9 +74,13 @@ sed -i 's/quiet splash plymouth.ignore-serial-consoles//' /boot/cmdline.txt
 
 # Swap
 swapoff -a
-dphys-swapfile swapoff
 sysctl -w vm.swappiness=1
-sed -i 's/vm.swappiness=.*/vm.swappiness=1/' /etc/sysctl.conf
+echo "vm.swappiness=1" >> /etc/sysctl.conf
+systemctl mask  "dev-*.swap"
+dphys-swapfile swapoff
+dphys-swapfile uninstall
+update-rc.d dphys-swapfile remove
+apt purge dphys-swapfile
 
 # Install helm
 curl -sLo helm.tar.gz https://get.helm.sh/helm-v3.8.2-linux-arm64.tar.gz
@@ -109,7 +113,7 @@ curl -s https://raw.githubusercontent.com/kubesail/pibox-os/main/setup.sh | bash
 # SSH Config
 echo "TCPKeepAlive yes" >> /etc/ssh/sshd_config
 touch /boot/ssh
-/boot/refresh-ssh-certs
+touch /boot/refresh-ssh-certs
 rm -vf ~/.ssh/*
 
 # Clean bash history

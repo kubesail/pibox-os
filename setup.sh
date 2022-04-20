@@ -71,7 +71,7 @@ fi
 # Install K3s and KubeSail agent
 if [[ ! -d /var/lib/rancher/k3s/data ]]; then
   echo "Installing k3s and KubeSail agent"
-  curl -sfL https://get.k3s.io | INSTALL_K3S_CHANNEL=stable sh
+  curl --retry 5 --retry-delay 3 -L https://get.k3s.io | INSTALL_K3S_CHANNEL=stable sh
   kubectl create -f https://api.kubesail.com/byoc
 fi
 
@@ -82,10 +82,11 @@ chmod +x /opt/kubesail/pibox-first-boot.sh
 # Install PiBox first boot service
 cat <<'EOF' > /etc/systemd/system/pibox-first-boot.service
 [Unit]
-After=network.service
-After=network-online.target
-Wants=network-online.target
+After=systemd-networkd-wait-online.service
+Requires=systemd-networkd-wait-online.service
 [Service]
+Restart=on-failure
+RestartSec=5
 ExecStart=/opt/kubesail/pibox-first-boot.sh
 [Install]
 WantedBy=default.target
