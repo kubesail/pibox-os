@@ -37,25 +37,43 @@ systemctl restart systemd-journald.service
 # Add tmpfs at /tmp to reduce EMMC wear
 echo "tmpfs /var/tmp tmpfs defaults,noatime,nosuid,nodev,noexec,mode=0755,size=1M 0 0" >> /etc/fstab
 
-# Enable Fan Support
-git clone https://github.com/kubesail/pibox-os.git && \
-  cd pibox-os/pwm-fan && \
-  tar zxvf bcm2835-1.68.tar.gz && cd bcm2835-1.68 && \
-  ./configure && make && make install && cd ../ && \
-  make && make install && echo "PIBOX_RELEASE=$(git rev-parse --short HEAD)" > /etc/pibox-release && cd ../.. && rm -rf pibox-os
+# Clone PiBox OS repo for building fan/display drivers
+git clone https://github.com/kubesail/pibox-os.git
+echo "PIBOX_RELEASE=$(git rev-parse --short HEAD)" > /etc/pibox-release
 
-# Display driver
-curl -s https://raw.githubusercontent.com/kubesail/pibox-os/main/setup-display.sh | bash
+# Enable Fan Support
+pushd pibox-os/pwm-fan
+tar zxvf bcm2835-1.68.tar.gz
+pushd bcm2835-1.68
+./configure && make && make install
+popd
+make && make install
+popd
+
+# Enable Display Driver
+pushd pibox-os/st7789_module
+make
+mv /lib/modules/"$(uname -r)"/kernel/drivers/staging/fbtft/fb_st7789v.ko /lib/modules/"$(uname -r)"/kernel/drivers/staging/fbtft/fb_st7789v.BACK
+mv fb_st7789v.ko /lib/modules/"$(uname -r)"/kernel/drivers/staging/fbtft/fb_st7789v.ko
+popd
+dtc --warning no-unit_address_vs_reg -I dts -O dtb -o /boot/overlays/drm-minipitft13.dtbo /tmp/pibox-os/overlays/minipitft13-overlay.dts
+cat <<EOF >> /boot/config.txt
+dtoverlay=spi0-1cs
+dtoverlay=dwc2,dr_mode=host
+hdmi_force_hotplug=1
+dtoverlay=drm-minipitft13,rotate=0,fps=60
+EOF
+
+# Remove PiBox repo
+rm -rf pibox-os
 
 # SSH Config
 echo "TCPKeepAlive yes" >> /etc/ssh/sshd_config
-touch /boot/ssh
 
 # Kernel settings
 grep -qxF 'cgroup_enable=memory cgroup_memory=1' /boot/cmdline.txt || sed -i 's/$/ cgroup_enable=memory cgroup_memory=1/' /boot/cmdline.txt
 # Show text output during startup / shutdown (useful if reboot hangs)
 sed -i 's/quiet splash plymouth.ignore-serial-consoles//' /boot/cmdline.txt
-
 
 # Swap
 swapoff -a
@@ -90,7 +108,6 @@ systemctl daemon-reload
 
 # Install KubeSail helper services
 curl -s https://raw.githubusercontent.com/kubesail/pibox-os/main/setup.sh | bash
-# now you can run `kubesail` to initialize the KubeSail agent at any time
 
 # This happens with PiShrink. Only uncomment if using packer
 # truncate -s-1 /boot/cmdline.txt
@@ -101,9 +118,5 @@ curl -s https://raw.githubusercontent.com/kubesail/pibox-os/main/setup.sh | bash
 #systemctl disable ssh
 
 # Clean bash history
-history -c && history -w
-exit
-
-# logout of root and do the same for pi user
 history -c && history -w
 exit
