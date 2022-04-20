@@ -92,9 +92,6 @@ systemctl daemon-reload
 curl -s https://raw.githubusercontent.com/kubesail/pibox-os/main/setup.sh | bash
 # now you can run `kubesail` to initialize the KubeSail agent at any time
 
-# Refresh SSH certs on first boot
-touch /boot/refresh-ssh-certs
-
 # This happens with PiShrink. Only uncomment if using packer
 # truncate -s-1 /boot/cmdline.txt
 # echo -n " init=/usr/lib/raspi-config/init_resize.sh" >> /boot/cmdline.txt
