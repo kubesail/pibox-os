@@ -1,6 +1,6 @@
 #!/bin/bash
 set -e
-sex -x
+set -x
 
 if [ "$EUID" -ne 0 ]
   then echo "Please run as root"
@@ -84,7 +84,7 @@ update-rc.d dphys-swapfile remove
 apt purge dphys-swapfile
 
 # Install helm
-curl -sLo helm.tar.gz https://get.helm.sh/helm-v3.8.2-linux-arm64.tar.gz
+curl -Lo helm.tar.gz https://get.helm.sh/helm-v3.8.2-linux-arm64.tar.gz
 tar zxf helm.tar.gz
 mv linux-arm64/helm /usr/local/bin/
 chmod +x /usr/local/bin/helm
@@ -94,7 +94,7 @@ rm -rf linux-arm64 helm.tar.gz
 mkdir -p /opt/kubesail/
 curl -sLo /opt/kubesail/provision-disk.sh https://raw.githubusercontent.com/kubesail/pibox-os/main/provision-disk.sh
 chmod +x /opt/kubesail/provision-disk.sh
-/opt/kubesail/./provision-disk.sh
+/opt/kubesail/provision-disk.sh
 # Run disk provisioner before K3s starts
 mkdir -p /etc/systemd/system/k3s.service.d
 echo -e "[Service]\nExecStartPre=/opt/kubesail/provision-disk.sh" > /etc/systemd/system/k3s.service.d/override.conf
