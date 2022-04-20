@@ -3,41 +3,6 @@
 useradd -u 989 --system --shell=/usr/sbin/nologin kubesail-agent
 mkdir -p /opt/kubesail/
 
-# Install KubeSail CLI setup script
-cat <<'EOF' > /usr/local/bin/kubesail
-#!/bin/bash
-
-if [[ $(/usr/bin/id -u) -ne 0 ]]; then
-    echo "Not running as root. Try re-running with sudo, e.g. $(tput bold)sudo kubesail init$(tput sgr0)"
-    exit
-fi
-
-read -p "What is your KubeSail username? " KUBESAIL_USERNAME
-
-if [ -z "$KUBESAIL_USERNAME" ]; then
-    echo "Username is empty, not installing KubeSail."
-    exit 1
-fi
-
-echo $KUBESAIL_USERNAME > /boot/kubesail-username.txt
-
-read -p "Do you want to install your public GitHub keys for SSH access? NOTE: This will disable SSH password logins. [Y/n] " GITHUB_SSH
-GITHUB_SSH=${GITHUB_SSH:-Y}
-
-if [ $GITHUB_SSH = "Y" ]; then
-    read -p "What is your GitHub username? [$KUBESAIL_USERNAME] " GITHUB_USERNAME
-    GITHUB_USERNAME=${GITHUB_USERNAME:-$KUBESAIL_USERNAME}
-    echo $GITHUB_USERNAME > /boot/github-ssh-username.txt
-    echo "Installing GitHub Keys..."
-    systemctl start pibox-first-boot.service
-fi
-
-echo "Installing KubeSail agent. Please wait..."
-
-systemctl start kubesail-init.service
-EOF
-chmod +x /usr/local/bin/kubesail
-
 # Install KubeSail Debug helper
 cat <<'EOF' > /usr/local/bin/kubesail-support
 #!/bin/bash
@@ -78,7 +43,6 @@ chmod +x /usr/local/bin/kubesail-support
 # Install PiBox first boot script
 cat <<'EOF' > /opt/kubesail/pibox-first-boot.sh
 #!/bin/bash
-PATH_GITHUB_USERNAME=/boot/github-ssh-username.txt
 PATH_REFRESH_SSH_CERTS=/boot/refresh-ssh-certs
 
 if [[ -f $PATH_GITHUB_USERNAME ]]; then
@@ -104,7 +68,6 @@ if [[ -f $PATH_REFRESH_SSH_CERTS ]]; then
     rm $PATH_REFRESH_SSH_CERTS
 fi
 
-
 # Install K3s and KubeSail agent
 if [[ ! -d /var/lib/rancher/k3s/data ]]; then
   echo "Installing k3s and KubeSail agent"
@@ -114,19 +77,6 @@ fi
 
 EOF
 chmod +x /opt/kubesail/pibox-first-boot.sh
-
-# Install KubeSail init service
-cat <<'EOF' > /etc/systemd/system/kubesail-init.service
-[Unit]
-After=network.service
-After=k3s.service
-After=network-online.target
-Wants=network-online.target
-[Service]
-ExecStart=/opt/kubesail/init.sh
-[Install]
-WantedBy=default.target
-EOF
 
 
 # Install PiBox first boot service
@@ -162,5 +112,4 @@ EOF
 systemctl daemon-reload
 
 systemctl enable pibox-first-boot.service
-systemctl enable kubesail-init.service
 systemctl enable pibox-framebuffer.service
