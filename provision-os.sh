@@ -67,9 +67,6 @@ EOF
 # Remove PiBox repo
 rm -rf pibox-os
 
-# SSH Config
-echo "TCPKeepAlive yes" >> /etc/ssh/sshd_config
-
 # Kernel settings
 grep -qxF 'cgroup_enable=memory cgroup_memory=1' /boot/cmdline.txt || sed -i 's/$/ cgroup_enable=memory cgroup_memory=1/' /boot/cmdline.txt
 # Show text output during startup / shutdown (useful if reboot hangs)
@@ -108,6 +105,12 @@ curl -s https://raw.githubusercontent.com/kubesail/pibox-os/main/setup.sh | bash
 # Disable SSH
 #systemctl stop ssh
 #systemctl disable ssh
+
+# SSH Config
+echo "TCPKeepAlive yes" >> /etc/ssh/sshd_config
+touch /boot/ssh
+/boot/refresh-ssh-certs
+rm -vf ~/.ssh/*
 
 # Clean bash history
 history -c && history -w
