@@ -1,5 +1,6 @@
 #!/bin/bash
 set -e
+sex -x
 
 if [ "$EUID" -ne 0 ]
   then echo "Please run as root"
