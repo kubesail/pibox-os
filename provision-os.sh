@@ -81,7 +81,7 @@ systemctl mask  "dev-*.swap"
 dphys-swapfile swapoff
 dphys-swapfile uninstall
 update-rc.d dphys-swapfile remove
-apt purge dphys-swapfile
+apt purge dphys-swapfile || true
 
 # Install helm
 curl -Lo helm.tar.gz https://get.helm.sh/helm-v3.8.2-linux-arm64.tar.gz
