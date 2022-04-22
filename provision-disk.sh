@@ -39,9 +39,9 @@ done
 
 # If our VirtualGroup doesn't exist, let's provision for the first time:
 if [[ "$(vgdisplay ${VG_GROUP_NAME})" == "" && "${DISKS_TO_ADD}" != "" ]]; then
-  curl --unix-socket /var/run/pibox/framebuffer.sock -X POST http://localhost/rgb -XPOST -d '{"R":236, "G": 57, "B": 99}'
-  curl --unix-socket /var/run/pibox/framebuffer.sock -X POST "http://localhost/text?size=38&y=50&content=Formatting+Disks"
-  curl --unix-socket /var/run/pibox/framebuffer.sock -X POST "http://localhost/text?size=26&y=180&content=This+may+take+a+few+minutes"
+  curl --fail --unix-socket /var/run/pibox/framebuffer.sock -X POST http://localhost/rgb -XPOST -d '{"R":236, "G": 57, "B": 99}'
+  curl --fail --unix-socket /var/run/pibox/framebuffer.sock -X POST "http://localhost/text?size=38&y=50&content=Formatting+Disks"
+  curl --fail --unix-socket /var/run/pibox/framebuffer.sock -X POST "http://localhost/text?size=26&y=180&content=This+may+take+a+few+minutes"
 
   vgcreate "${VG_GROUP_NAME}" ${DISKS_TO_ADD}
   # Use 100% of available space
@@ -56,7 +56,7 @@ if [[ "$(vgdisplay ${VG_GROUP_NAME})" == "" && "${DISKS_TO_ADD}" != "" ]]; then
   # slower than 'data=writeback' and `mkfs.ext4 -O ^has_journal`, but safer and more durable against crashes and power-loss
   # fast_commit above helps keep this from being too much of a slowdown
   echo "/dev/${VG_GROUP_NAME}/k3s /var/lib/rancher ext4 defaults,discard,nofail,noatime,data=ordered,errors=remount-ro 0 0" >> /etc/fstab
-  echo -e "[Service]\nExecStartPre=/root/provision-disk.sh\n[Unit]\nAfter=var-lib-rancher.mount\nRequires=var-lib-rancher.mount" > /etc/systemd/system/k3s.service.d/override.conf
+  echo -e "[Unit]\nAfter=var-lib-rancher.mount\nRequires=var-lib-rancher.mount" > /etc/systemd/system/k3s.service.d/mount.conf
   systemctl daemon-reload
 
   # Migrate K3S if it exists (move /var/lib/rancher onto new LVM group)
@@ -81,8 +81,8 @@ if [[ "$(vgdisplay ${VG_GROUP_NAME})" == "" && "${DISKS_TO_ADD}" != "" ]]; then
     mkdir /var/lib/rancher
     mount /dev/${VG_GROUP_NAME}/k3s
   fi
-  curl --unix-socket /var/run/pibox/framebuffer.sock -X POST http://localhost/rgb -XPOST -d '{"R":0, "G": 255, "B": 0}'
-  curl --unix-socket /var/run/pibox/framebuffer.sock -X POST "http://localhost/text?size=38&y=110&content=Done+Formatting!"
+  curl --fail --unix-socket /var/run/pibox/framebuffer.sock -X POST http://localhost/rgb -XPOST -d '{"R":0, "G": 255, "B": 0}'
+  curl --fail --unix-socket /var/run/pibox/framebuffer.sock -X POST "http://localhost/text?size=38&y=110&content=Done+Formatting!"
 elif [[ "${DISKS_TO_ADD}" != "" ]]; then
   echo "Extending disk array, adding: ${DISKS_TO_ADD}"
   vgextend "${VG_GROUP_NAME}" ${DISKS_TO_ADD}

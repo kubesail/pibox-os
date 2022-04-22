@@ -97,7 +97,7 @@ chmod +x /opt/kubesail/provision-disk.sh
 /opt/kubesail/provision-disk.sh
 # Run disk provisioner before K3s starts
 mkdir -p /etc/systemd/system/k3s.service.d
-echo -e "[Service]\nExecStartPre=/opt/kubesail/provision-disk.sh" > /etc/systemd/system/k3s.service.d/override.conf
+echo -e "[Service]\nExecStartPre=/opt/kubesail/provision-disk.sh" > /etc/systemd/system/k3s.service.d/pre-exec.conf
 systemctl daemon-reload
 
 # Install KubeSail helper services
