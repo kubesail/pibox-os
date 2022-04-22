@@ -115,7 +115,8 @@ curl -s https://raw.githubusercontent.com/kubesail/pibox-os/main/setup.sh | bash
 echo "TCPKeepAlive yes" >> /etc/ssh/sshd_config
 touch /boot/ssh
 touch /boot/refresh-ssh-certs
-rm -vf ~/.ssh/*
+rm -vf /home/pi/.ssh/*
+sed -i s/PasswordAuthentication\ no/PasswordAuthentication\ yes/ /etc/ssh/sshd_config
 
 # Clean bash history
 history -c && history -w

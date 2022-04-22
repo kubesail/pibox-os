@@ -99,6 +99,9 @@ if [[ ! -f $FB_PATH ]]; then
 fi
 chown -R kubesail-agent: /opt/kubesail/
 cat <<'EOF' > /etc/systemd/system/pibox-framebuffer.service
+[Unit]
+Requires=multi-user.target
+After=multi-user.target
 [Service]
 ExecStart=/opt/kubesail/pibox-framebuffer
 Restart=always
