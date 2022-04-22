@@ -39,6 +39,10 @@ done
 
 # If our VirtualGroup doesn't exist, let's provision for the first time:
 if [[ "$(vgdisplay ${VG_GROUP_NAME})" == "" && "${DISKS_TO_ADD}" != "" ]]; then
+  curl --unix-socket /var/run/pibox/framebuffer.sock -X POST http://localhost/rgb -XPOST -d '{"R":236, "G": 57, "B": 99}'
+  curl --unix-socket /var/run/pibox/framebuffer.sock -X POST "http://localhost/text?size=38&y=50&content=Formatting+Disks"
+  curl --unix-socket /var/run/pibox/framebuffer.sock -X POST "http://localhost/text?size=26&y=180&content=This+may+take+a+few+minutes"
+
   vgcreate "${VG_GROUP_NAME}" ${DISKS_TO_ADD}
   # Use 100% of available space
   lvcreate -n k3s -l 100%FREE "${VG_GROUP_NAME}"
@@ -77,6 +81,8 @@ if [[ "$(vgdisplay ${VG_GROUP_NAME})" == "" && "${DISKS_TO_ADD}" != "" ]]; then
     mkdir /var/lib/rancher
     mount /dev/${VG_GROUP_NAME}/k3s
   fi
+  curl --unix-socket /var/run/pibox/framebuffer.sock -X POST http://localhost/rgb -XPOST -d '{"R":0, "G": 255, "B": 0}'
+  curl --unix-socket /var/run/pibox/framebuffer.sock -X POST "http://localhost/text?size=38&y=110&content=Done+Formatting!"
 elif [[ "${DISKS_TO_ADD}" != "" ]]; then
   echo "Extending disk array, adding: ${DISKS_TO_ADD}"
   vgextend "${VG_GROUP_NAME}" ${DISKS_TO_ADD}
