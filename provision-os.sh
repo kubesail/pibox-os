@@ -40,7 +40,9 @@ echo "tmpfs /var/tmp tmpfs defaults,noatime,nosuid,nodev,noexec,mode=0755,size=1
 
 # Clone PiBox OS repo for building fan/display drivers
 git clone https://github.com/kubesail/pibox-os.git
+pushd pibox-os
 echo "PIBOX_RELEASE=$(git rev-parse --short HEAD)" > /etc/pibox-release
+popd
 
 # Enable Fan Support
 pushd pibox-os/pwm-fan
