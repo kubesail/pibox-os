@@ -16,8 +16,11 @@ DISKS_TO_ADD=""
 # lvremove /dev/pibox-group/k3s
 # vgremove pibox-group
 # pvremove /dev/sda1
+# pvremove /dev/sdb1
 # sfdisk --delete /dev/sda 1
+# sfdisk --delete /dev/sdb 1
 # wipefs -a /dev/sda
+# wipefs -a /dev/sdb
 
 echo "Running provision-disk.sh"
 
@@ -39,9 +42,9 @@ done
 
 # If our VirtualGroup doesn't exist, let's provision for the first time:
 if [[ "$(vgdisplay ${VG_GROUP_NAME})" == "" && "${DISKS_TO_ADD}" != "" ]]; then
-  curl --fail --unix-socket /var/run/pibox/framebuffer.sock -X POST http://localhost/rgb -XPOST -d '{"R":236, "G": 57, "B": 99}'
-  curl --fail --unix-socket /var/run/pibox/framebuffer.sock -X POST "http://localhost/text?size=38&y=50&content=Formatting+Disks"
-  curl --fail --unix-socket /var/run/pibox/framebuffer.sock -X POST "http://localhost/text?size=26&y=180&content=This+may+take+a+few+minutes"
+  # curl --unix-socket /var/run/pibox/framebuffer.sock -X POST http://localhost/rgb -XPOST -d '{"R":236, "G": 57, "B": 99}' || true
+  # curl --unix-socket /var/run/pibox/framebuffer.sock -X POST "http://localhost/text?size=38&y=50&content=Formatting+Disks" || true
+  # curl --unix-socket /var/run/pibox/framebuffer.sock -X POST "http://localhost/text?size=26&y=180&content=This+may+take+a+few+minutes" || true
 
   vgcreate "${VG_GROUP_NAME}" ${DISKS_TO_ADD}
   # Use 100% of available space
@@ -81,8 +84,8 @@ if [[ "$(vgdisplay ${VG_GROUP_NAME})" == "" && "${DISKS_TO_ADD}" != "" ]]; then
     mkdir /var/lib/rancher
     mount /dev/${VG_GROUP_NAME}/k3s
   fi
-  curl --fail --unix-socket /var/run/pibox/framebuffer.sock -X POST http://localhost/rgb -XPOST -d '{"R":0, "G": 255, "B": 0}'
-  curl --fail --unix-socket /var/run/pibox/framebuffer.sock -X POST "http://localhost/text?size=38&y=110&content=Done+Formatting!"
+  # curl --unix-socket /var/run/pibox/framebuffer.sock -X POST http://localhost/rgb -XPOST -d '{"R":0, "G": 255, "B": 0}' || true
+  # curl --unix-socket /var/run/pibox/framebuffer.sock -X POST "http://localhost/text?size=38&y=110&content=Done+Formatting!" || true
 elif [[ "${DISKS_TO_ADD}" != "" ]]; then
   echo "Extending disk array, adding: ${DISKS_TO_ADD}"
   vgextend "${VG_GROUP_NAME}" ${DISKS_TO_ADD}
