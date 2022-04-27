@@ -33,7 +33,7 @@ echo -e "\n\nkubectl -n kubesail-agent logs -l app=kubesail-agent ==============
 kubectl -n kubesail-agent logs -l app=kubesail-agent >> ${TMPFILE}
 echo "Wrote logs to ${TMPFILE}"
 gzip ${TMPFILE}
-curl -s -H "Content-Type: application/json" -k -X POST --data-binary @${TMPFILE}.gz "https://192.168.100.162:4000/agent/upload-debug-logs/${KUBESAIL_AGENT_KEY}"
+curl -s -H "Content-Type: application/json" -X POST --data-binary @${TMPFILE}.gz "https://kubesail.com/agent/upload-debug-logs/${KUBESAIL_AGENT_KEY}"
 echo -e "\nUploaded logs to KubeSail-Support - thank you"
 
 EOF
