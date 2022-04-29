@@ -27,7 +27,21 @@ apt-get update -yqq
 apt-get full-upgrade -yqq
 apt-get autoremove -yqq
 apt-get autoclean -yqq
-apt-get install -yqq vim lvm2 openssh-server raspberrypi-kernel-headers
+apt-get install -yqq vim lvm2 openssh-server raspberrypi-kernel-headers samba samba-common-bin
+
+# Set up samba share
+mkdir -p /var/lib/rancher/k3s/storage
+echo -e "kubesail\nkubesail" | smbpasswd pi -a -s
+cat <<EOF >> /etc/samba/smb.conf
+[volumes]
+force user=root
+force group=root
+path = /var/lib/rancher/k3s/storage
+writeable=Yes
+create mask=0777
+directory mask=0777
+public=no
+EOF
 
 # Reduce logging and store in memory to reduce EMMC wear
 sed -i 's/.MaxLevelStore.*/MaxLevelStore=info/' /etc/systemd/journald.conf
