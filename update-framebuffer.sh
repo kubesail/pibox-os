@@ -6,7 +6,7 @@ fi
 echo "stopping pibox-framebuffer service"
 service pibox-framebuffer stop
 
-FB_VERSION=v8
+FB_VERSION=v9
 FB_PATH=/opt/kubesail/pibox-framebuffer-$FB_VERSION
 rm -f $FB_PATH
 echo "downloading pibox-framebuffer $FB_VERSION"
