@@ -8,7 +8,7 @@ service pibox-framebuffer stop
 
 FB_VERSION=v9
 FB_PATH=/opt/kubesail/pibox-framebuffer-$FB_VERSION
-rm -f $FB_PATH
+rm -vf $FB_PATH
 echo "downloading pibox-framebuffer $FB_VERSION"
 if [[ ! -f $FB_PATH ]]; then
     curl --connect-timeout 10 -sLo $FB_PATH https://github.com/kubesail/pibox-framebuffer/releases/download/$FB_VERSION/pibox-framebuffer
