@@ -12,3 +12,4 @@ if [[ ! -f $FB_PATH ]]; then
     ln -s $FB_PATH /opt/kubesail/pibox-framebuffer
 fi
 chown -R kubesail-agent: /opt/kubesail/
+ls -alh /opt/kubesail/pibox-framebuffer
