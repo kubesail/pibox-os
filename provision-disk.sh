@@ -14,6 +14,7 @@ DISKS_TO_ADD=""
 # umount -l /var/lib/rancher-ssd
 # wipefs -af /dev/pibox-group/k3s
 # lvremove /dev/pibox-group/k3s
+# vgreduce --removemissing pibox-group
 # vgremove pibox-group
 # pvremove /dev/sda1
 # pvremove /dev/sdb1
@@ -48,7 +49,7 @@ if [[ "$(vgdisplay ${VG_GROUP_NAME})" == "" && "${DISKS_TO_ADD}" != "" ]]; then
 
   vgcreate "${VG_GROUP_NAME}" ${DISKS_TO_ADD}
   # Use 100% of available space
-  lvcreate -n k3s -l 100%FREE "${VG_GROUP_NAME}"
+  lvcreate -n k3s -l "100%FREE" "${VG_GROUP_NAME}"
   # Create a new EXT4 filesystem with zero reserved space
   mkfs.ext4 -F -m 0 -b 4096 "/dev/${VG_GROUP_NAME}/k3s"
   # Enable "fast_commit" https://www.phoronix.com/scan.php?page=news_item&px=EXT4-Fast-Commit-Queued
@@ -63,7 +64,7 @@ if [[ "$(vgdisplay ${VG_GROUP_NAME})" == "" && "${DISKS_TO_ADD}" != "" ]]; then
   systemctl daemon-reload
 
   # Migrate K3S if it exists (move /var/lib/rancher onto new LVM group)
-  if [[ -d "/var/lib/rancher" ]]; then
+  if [[ -d "/var/lib/rancher/k3s" ]]; then
     pgrep k3s && service k3s stop
     # Create a temporary directory
     mkdir -p /var/lib/rancher-ssd
@@ -89,9 +90,8 @@ if [[ "$(vgdisplay ${VG_GROUP_NAME})" == "" && "${DISKS_TO_ADD}" != "" ]]; then
 elif [[ "${DISKS_TO_ADD}" != "" ]]; then
   echo "Extending disk array, adding: ${DISKS_TO_ADD}"
   vgextend "${VG_GROUP_NAME}" ${DISKS_TO_ADD}
-  lvextend -L100%FREE /dev/${VG_GROUP_NAME}/k3s
+  lvextend -l "100%FREE" /dev/${VG_GROUP_NAME}/k3s
   resize2fs /dev/${VG_GROUP_NAME}/k3s
 else
   echo "No disks to format, continuing. DISKS_TO_ADD was: ${DISKS_TO_ADD}"
 fi
-
