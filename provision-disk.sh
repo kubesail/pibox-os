@@ -82,7 +82,7 @@ if [[ "$(vgdisplay ${VG_GROUP_NAME})" == "" && "${DISKS_TO_ADD}" != "" ]]; then
     rm -rf /var/lib/rancher-ssd
     echo "You may need to start k3s again with 'service k3s start', if you ran this script manually."
   else
-    mkdir /var/lib/rancher
+    mkdir -p /var/lib/rancher
     mount /dev/${VG_GROUP_NAME}/k3s
   fi
   # curl --unix-socket /var/run/pibox/framebuffer.sock -X POST http://localhost/rgb -XPOST -d '{"R":0, "G": 255, "B": 0}' || true
