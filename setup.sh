@@ -20,17 +20,17 @@ if [ -f /etc/os-release ]; then
 fi
 echo -e "\n\nKernel ==============\n $(uname -a)" >> ${TMPFILE}
 echo -e "\n\nkubectl version ==============" >> ${TMPFILE}
-kubectl version >> ${TMPFILE}
+sudo kubectl version >> ${TMPFILE}
 echo -e "\n\nk3s check-config ==============" >> ${TMPFILE}
-k3s check-config >> ${TMPFILE}
+sudo k3s check-config >> ${TMPFILE}
 echo -e "\n\nkubectl get nodes ==============" >> ${TMPFILE}
-kubectl get nodes >> ${TMPFILE}
+sudo kubectl get nodes >> ${TMPFILE}
 echo -e "\n\nkubectl -n kube-system get pods ==============" >> ${TMPFILE}
-kubectl -n kube-system get pods >> ${TMPFILE}
+sudo kubectl -n kube-system get pods >> ${TMPFILE}
 echo -e "\n\nkubectl -n kubesail-agent describe pods ==============" >> ${TMPFILE}
-kubectl -n kubesail-agent describe pods >> ${TMPFILE}
+sudo kubectl -n kubesail-agent describe pods >> ${TMPFILE}
 echo -e "\n\nkubectl -n kubesail-agent logs -l app=kubesail-agent ==============" >> ${TMPFILE}
-kubectl -n kubesail-agent logs -l app=kubesail-agent >> ${TMPFILE}
+sudo kubectl -n kubesail-agent logs -l app=kubesail-agent >> ${TMPFILE}
 echo "Wrote logs to ${TMPFILE}"
 gzip ${TMPFILE}
 curl -s -H "Content-Type: application/json" -X POST --data-binary @${TMPFILE}.gz "https://kubesail.com/agent/upload-debug-logs/${KUBESAIL_AGENT_KEY}"
