@@ -1,7 +1,11 @@
 #!/bin/bash
 
 TMPFILE="$(mktemp)"
+RANDOM_KEY=$(echo $RANDOM | md5sum | head -c 20; echo)
 KUBESAIL_AGENT_KEY="$(sudo kubectl -n kubesail-agent get pods -o yaml | fgrep KUBESAIL_AGENT_KEY -A1 | tail -n1 | awk '{print $2}')"
+if [ -z "${KUBESAIL_AGENT_KEY}" ]; then
+  KUBESAIL_AGENT_KEY="no-agent"
+fi
 
 if [ -f /etc/pibox-release ]; then
     echo -e "\n\nPiBox version ==============" >> ${TMPFILE}
@@ -26,5 +30,5 @@ echo -e "\n\nkubectl -n kubesail-agent logs -l app=kubesail-agent ==============
 sudo kubectl -n kubesail-agent logs -l app=kubesail-agent --tail=-1 >> ${TMPFILE}
 echo "Wrote logs to ${TMPFILE}"
 gzip ${TMPFILE}
-curl -s -H "Content-Type: application/json" -X POST --data-binary @${TMPFILE}.gz "https://api.kubesail.com/agent/upload-debug-logs/${KUBESAIL_AGENT_KEY}"
-echo -e "\nUploaded logs to KubeSail-Support - thank you"
+curl -s -H "Content-Type: application/json" -X POST --data-binary @${TMPFILE}.gz "https://api.kubesail.com/agent/upload-debug-logs/${KUBESAIL_AGENT_KEY}/${RANDOM_KEY}"
+echo -e "\nUploaded logs to KubeSail support. Please provide the code \"${RANDOM_KEY}\" - thank you"
