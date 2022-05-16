@@ -23,7 +23,7 @@ sudo kubectl -n kube-system get pods >> ${TMPFILE}
 echo -e "\n\nkubectl -n kubesail-agent describe pods ==============" >> ${TMPFILE}
 sudo kubectl -n kubesail-agent describe pods >> ${TMPFILE}
 echo -e "\n\nkubectl -n kubesail-agent logs -l app=kubesail-agent ==============" >> ${TMPFILE}
-sudo kubectl -n kubesail-agent logs -l app=kubesail-agent >> ${TMPFILE}
+sudo kubectl -n kubesail-agent logs -l app=kubesail-agent --tail=-1 >> ${TMPFILE}
 echo "Wrote logs to ${TMPFILE}"
 gzip ${TMPFILE}
 curl -s -H "Content-Type: application/json" -X POST --data-binary @${TMPFILE}.gz "https://api.kubesail.com/agent/upload-debug-logs/${KUBESAIL_AGENT_KEY}"
