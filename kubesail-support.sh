@@ -24,6 +24,9 @@ sudo kubectl version >> ${TMPFILE}
 echo -e "\n\nk3s check-config ==============" >> ${TMPFILE}
 sudo k3s check-config >> ${TMPFILE}
 
+echo -e "\n\nk3s --version ==============" >> ${TMPFILE}
+sudo k3s --version >> ${TMPFILE}
+
 echo -e "\n\nkubectl get nodes ==============" >> ${TMPFILE}
 sudo kubectl get nodes >> ${TMPFILE}
 
