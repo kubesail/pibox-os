@@ -31,16 +31,16 @@ echo -e "\n\nkubectl -n kube-system get pods ==============" >> ${TMPFILE}
 sudo kubectl -n kube-system get pods >> ${TMPFILE}
 
 echo -e "\n\nkubectl -n kube-system describe traefik ==============" >> ${TMPFILE}
-sudo kubectl -n kube-system describe pod -l "app.kubernetes.io/name=traefik"
+sudo kubectl -n kube-system describe pod -l "app.kubernetes.io/name=traefik" >> ${TMPFILE}
 
 echo -e "\n\nkubectl -n kube-system logs traefik ==============" >> ${TMPFILE}
-sudo kubectl -n kube-system logs -l "app.kubernetes.io/name=traefik"
+sudo kubectl -n kube-system logs -l "app.kubernetes.io/name=traefik" >> ${TMPFILE}
 
 echo -e "\n\nkubectl -n kube-system describe svclb-traefik ==============" >> ${TMPFILE}
-sudo kubectl -n kube-system describe pods -l app=svclb-traefik
+sudo kubectl -n kube-system describe pods -l app=svclb-traefik >> ${TMPFILE}
 
 echo -e "\n\nkubectl -n kube-system logs svclb-traefik ==============" >> ${TMPFILE}
-sudo kubectl -n kube-system logs -l app=svclb-traefik -c "lb-port-443"
+sudo kubectl -n kube-system logs -l app=svclb-traefik -c "lb-port-443" >> ${TMPFILE}
 
 echo -e "\n\nkubectl -n kubesail-agent describe pods ==============" >> ${TMPFILE}
 sudo kubectl -n kubesail-agent describe pods >> ${TMPFILE}
