@@ -27,7 +27,7 @@ echo "Running provision-disk.sh"
 
 # For each of the possible 5 disks installed
 for DISK in /dev/sda /dev/sdb /dev/sdc /dev/sdd /dev/sde; do
-  # Ensure the device disks, it has no partition, and has no filesystem signature
+  # Ensure the device exists, it has no partition, and has no filesystem signature
   if [[ -a "${DISK}" && ! -a "${DISK}1" && "$(wipefs -i -n ${DISK})" == "" ]]; then
     # Test creating a PV out of this disk, which will fail if the disk appears to have data on it
     if echo n | pvcreate -qt "${DISK}"; then
