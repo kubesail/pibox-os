@@ -24,6 +24,9 @@ sudo kubectl version >> ${TMPFILE}
 echo -e "\n\nk3s check-config ==============" >> ${TMPFILE}
 sudo k3s check-config >> ${TMPFILE}
 
+echo -e "\n\nk3s logs ==============" >> ${TMPFILE}
+journalctl -u k3s -n 25 --no-tail --no-pager >> ${TMPFILE}
+
 echo -e "\n\nk3s --version ==============" >> ${TMPFILE}
 sudo k3s --version >> ${TMPFILE}
 
