@@ -50,15 +50,6 @@ ${KUBECTL} -n kube-system get pods >> ${TMPFILE}
 echo -e "\n\nkubectl -n kube-system describe traefik ==============" >> ${TMPFILE}
 ${KUBECTL} -n kube-system describe pod -l "app.kubernetes.io/name=traefik" >> ${TMPFILE}
 
-echo -e "\n\nkubectl -n kube-system logs traefik ==============" >> ${TMPFILE}
-${KUBECTL} -n kube-system logs -l "app.kubernetes.io/name=traefik" >> ${TMPFILE}
-
-echo -e "\n\nkubectl -n kube-system describe svclb-traefik ==============" >> ${TMPFILE}
-${KUBECTL} -n kube-system describe pods -l app=svclb-traefik >> ${TMPFILE}
-
-echo -e "\n\nkubectl -n kube-system logs svclb-traefik ==============" >> ${TMPFILE}
-${KUBECTL} -n kube-system logs -l app=svclb-traefik -c "lb-port-443" >> ${TMPFILE}
-
 echo -e "\n\nkubectl -n kubesail-agent describe pods ==============" >> ${TMPFILE}
 ${KUBECTL} -n kubesail-agent describe pods >> ${TMPFILE}
 
