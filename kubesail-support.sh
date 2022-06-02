@@ -1,8 +1,9 @@
 #!/bin/bash
 
 TMPFILE="$(mktemp)"
+KUBECTL="sudo KUBECONFIG=/etc/rancher/k3s/k3s.yaml kubectl"
 RANDOM_KEY=$(echo $RANDOM | md5sum | head -c 20; echo)
-KUBESAIL_AGENT_KEY="$(sudo kubectl -n kubesail-agent get pods -o yaml | fgrep KUBESAIL_AGENT_KEY -A1 | tail -n1 | awk '{print $2}')"
+KUBESAIL_AGENT_KEY="$(${KUBECTL} -n kubesail-agent get pods -o yaml | fgrep KUBESAIL_AGENT_KEY -A1 | tail -n1 | awk '{print $2}')"
 if [ -z "${KUBESAIL_AGENT_KEY}" ]; then
   KUBESAIL_AGENT_KEY="no-agent"
 fi
@@ -26,7 +27,7 @@ free -m >> ${TMPFILE}
 uptime >> ${TMPFILE}
 
 echo -e "\n\nkubectl version ==============" >> ${TMPFILE}
-sudo kubectl version >> ${TMPFILE}
+${KUBECTL} version >> ${TMPFILE}
 
 echo -e "\n\nk3s check-config ==============" >> ${TMPFILE}
 sudo k3s check-config >> ${TMPFILE}
@@ -39,8 +40,6 @@ sudo k3s --version >> ${TMPFILE}
 
 echo -e "\n\nk3s ctr images ls ==============" >> ${TMPFILE}
 sudo k3s ctr images ls >> ${TMPFILE}
-
-KUBECTL="sudo KUBECONFIG=/etc/rancher/k3s/k3s.yaml kubectl"
 
 echo -e "\n\nkubectl get nodes ==============" >> ${TMPFILE}
 ${KUBECTL} get nodes >> ${TMPFILE}
