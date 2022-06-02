@@ -18,6 +18,13 @@ fi
 
 echo -e "\n\nKernel ==============\n $(uname -a)" >> ${TMPFILE}
 
+echo -e "\n\nCPU model ==============" >> ${TMPFILE}
+cat /proc/cpuinfo | fgrep 'model name' | uniq >> ${TMPFILE}
+
+echo -e "\n\nMemory / load ==============" >> ${TMPFILE}
+free -m >> ${TMPFILE}
+uptime >> ${TMPFILE}
+
 echo -e "\n\nkubectl version ==============" >> ${TMPFILE}
 sudo kubectl version >> ${TMPFILE}
 
