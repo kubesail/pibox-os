@@ -40,29 +40,31 @@ sudo k3s --version >> ${TMPFILE}
 echo -e "\n\nk3s ctr images ls ==============" >> ${TMPFILE}
 sudo k3s ctr images ls >> ${TMPFILE}
 
+KUBECTL="sudo KUBECONFIG=/etc/rancher/k3s/k3s.yaml kubectl"
+
 echo -e "\n\nkubectl get nodes ==============" >> ${TMPFILE}
-sudo kubectl get nodes >> ${TMPFILE}
+${KUBECTL} get nodes >> ${TMPFILE}
 
 echo -e "\n\nkubectl -n kube-system get pods ==============" >> ${TMPFILE}
-sudo kubectl -n kube-system get pods >> ${TMPFILE}
+${KUBECTL} -n kube-system get pods >> ${TMPFILE}
 
 echo -e "\n\nkubectl -n kube-system describe traefik ==============" >> ${TMPFILE}
-sudo kubectl -n kube-system describe pod -l "app.kubernetes.io/name=traefik" >> ${TMPFILE}
+${KUBECTL} -n kube-system describe pod -l "app.kubernetes.io/name=traefik" >> ${TMPFILE}
 
 echo -e "\n\nkubectl -n kube-system logs traefik ==============" >> ${TMPFILE}
-sudo kubectl -n kube-system logs -l "app.kubernetes.io/name=traefik" >> ${TMPFILE}
+${KUBECTL} -n kube-system logs -l "app.kubernetes.io/name=traefik" >> ${TMPFILE}
 
 echo -e "\n\nkubectl -n kube-system describe svclb-traefik ==============" >> ${TMPFILE}
-sudo kubectl -n kube-system describe pods -l app=svclb-traefik >> ${TMPFILE}
+${KUBECTL} -n kube-system describe pods -l app=svclb-traefik >> ${TMPFILE}
 
 echo -e "\n\nkubectl -n kube-system logs svclb-traefik ==============" >> ${TMPFILE}
-sudo kubectl -n kube-system logs -l app=svclb-traefik -c "lb-port-443" >> ${TMPFILE}
+${KUBECTL} -n kube-system logs -l app=svclb-traefik -c "lb-port-443" >> ${TMPFILE}
 
 echo -e "\n\nkubectl -n kubesail-agent describe pods ==============" >> ${TMPFILE}
-sudo kubectl -n kubesail-agent describe pods >> ${TMPFILE}
+${KUBECTL} -n kubesail-agent describe pods >> ${TMPFILE}
 
 echo -e "\n\nkubectl -n kubesail-agent logs -l app=kubesail-agent ==============" >> ${TMPFILE}
-sudo kubectl -n kubesail-agent logs -l app=kubesail-agent --tail=-1 >> ${TMPFILE}
+${KUBECTL} -n kubesail-agent logs -l app=kubesail-agent --tail=-1 >> ${TMPFILE}
 
 echo "Wrote logs to ${TMPFILE}"
 gzip ${TMPFILE}
