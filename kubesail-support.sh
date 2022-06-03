@@ -8,6 +8,8 @@ if [ -z "${KUBESAIL_AGENT_KEY}" ]; then
   KUBESAIL_AGENT_KEY="no-agent"
 fi
 
+echo "Support script starting - this may take a moment."
+
 if [ -f /etc/pibox-release ]; then
     echo -e "\n\nPiBox version ==============" >> ${TMPFILE}
     cat /etc/pibox-release >> ${TMPFILE}
