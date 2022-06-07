@@ -89,10 +89,14 @@ grep -qxF 'cgroup_enable=memory cgroup_memory=1' /boot/cmdline.txt || sed -i 's/
 # Show text output during startup / shutdown (useful if reboot hangs)
 sed -i 's/quiet splash plymouth.ignore-serial-consoles//' /boot/cmdline.txt
 
+# Sysctl & limits
+echo "vm.swappiness=1" >> /etc/sysctl.conf
+echo "fs.file-max=10240" >> /etc/sysctl.conf
+sysctl -p
+echo "* soft nofile 4096" >> /etc/security/limits.conf
+
 # Swap
 swapoff -a
-sysctl -w vm.swappiness=1
-echo "vm.swappiness=1" >> /etc/sysctl.conf
 systemctl mask  "dev-*.swap"
 dphys-swapfile swapoff
 dphys-swapfile uninstall
