@@ -39,7 +39,7 @@ fi
 if [[ ! -d /var/lib/rancher/k3s/data ]]; then
   echo "Installing k3s and KubeSail agent"
   curl --unix-socket /var/run/pibox/framebuffer.sock "http://localhost/text?content=Installing+k3s&background=000000&size=46&color=ffffff"
-  curl --connect-timeout 10 --retry 5 --retry-delay 3 -L https://get.k3s.io | INSTALL_K3S_CHANNEL=stable sh
+  curl --connect-timeout 10 --retry 5 --retry-delay 3 -L https://get.k3s.io | INSTALL_K3S_CHANNEL=stable INSTALL_K3S_EXEC="server --no-deploy traefik --disable=traefik --kubelet-arg container-log-max-files=3 --kubelet-arg container-log-max-size=20Mi" sh
 
   function kubernetes_failed_to_boot () {
     curl --unix-socket /var/run/pibox/framebuffer.sock "http://localhost/text?content=Failed+starting+k3s+services&background=000000&size=46&color=ff0000"
