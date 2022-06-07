@@ -91,9 +91,9 @@ sed -i 's/quiet splash plymouth.ignore-serial-consoles//' /boot/cmdline.txt
 
 # Sysctl & limits
 echo "vm.swappiness=1" >> /etc/sysctl.conf
-echo "fs.file-max=10240" >> /etc/sysctl.conf
+echo "fs.file-max=1024000" >> /etc/sysctl.conf
 sysctl -p
-echo "* soft nofile 4096" >> /etc/security/limits.conf
+echo "* soft nofile 8192" >> /etc/security/limits.conf
 
 # Swap
 swapoff -a
