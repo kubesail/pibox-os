@@ -37,7 +37,11 @@ for DISK in /dev/sda /dev/sdb /dev/sdc /dev/sdd /dev/sde; do
       echo n | pvcreate -q "${DISK}1" && {
         DISKS_TO_ADD="${DISK}1 ${DISKS_TO_ADD}"
       }
+    else
+      echo "Not using ${DISK} because it appears to have a filesystem signature already"
     fi
+  else
+    echo "Not using ${DISK} because it appears to contain a partition already"
   fi
 done
 
