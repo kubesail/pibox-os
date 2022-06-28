@@ -90,28 +90,5 @@ ExecStart=/opt/kubesail/pibox-first-boot.sh
 WantedBy=default.target
 EOF
 
-# Install PiBox framebuffer service
-FB_VERSION=v9
-FB_PATH=/opt/kubesail/pibox-framebuffer-$FB_VERSION
-if [[ ! -f $FB_PATH ]]; then
-    curl --connect-timeout 10 -sLo $FB_PATH https://github.com/kubesail/pibox-framebuffer/releases/download/$FB_VERSION/pibox-framebuffer
-    chmod +x $FB_PATH
-    ln -s $FB_PATH /opt/kubesail/pibox-framebuffer
-fi
-chown -R kubesail-agent: /opt/kubesail/
-cat <<'EOF' > /etc/systemd/system/pibox-framebuffer.service
-[Unit]
-Requires=multi-user.target
-After=multi-user.target
-[Service]
-ExecStart=/opt/kubesail/pibox-framebuffer
-Restart=always
-RestartSec=5s
-[Install]
-WantedBy=multi-user.target
-EOF
-
 systemctl daemon-reload
-
 systemctl enable pibox-first-boot.service
-systemctl enable pibox-framebuffer.service
