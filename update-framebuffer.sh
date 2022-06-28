@@ -13,7 +13,7 @@ case $(uname -m) in
   x86_64) architecture="amd64" ;;
   arm)    dpkg --print-architecture | grep -q "arm64" && architecture="arm64" || architecture="arm" ;;
 esac
-FB_VERSION=v13
+FB_VERSION=v14
 FB_PATH=/opt/kubesail/pibox-framebuffer-$FB_VERSION
 rm -vf $FB_PATH
 echo "downloading pibox-framebuffer $FB_VERSION"
