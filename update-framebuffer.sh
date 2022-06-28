@@ -1,29 +1,57 @@
 #!/bin/bash
 
+set -e
+
+FB_VERSION=v14
+
 if [ "$EUID" -ne 0 ]
   then echo "Please run as root"
   exit
 fi
 
-echo "stopping pibox-framebuffer service"
-service pibox-framebuffer stop
+if [[ -f /etc/systemd/system/pibox-framebuffer.service ]]; then
+  echo "stopping pibox-framebuffer service"
+  service pibox-framebuffer stop
+fi
 
 architecture="arm64"
 case $(uname -m) in
   x86_64) architecture="amd64" ;;
   arm)    dpkg --print-architecture | grep -q "arm64" && architecture="arm64" || architecture="arm" ;;
 esac
-FB_VERSION=v14
+
 FB_PATH=/opt/kubesail/pibox-framebuffer-$FB_VERSION
-rm -vf $FB_PATH
+mkdir -p /opt/kubesail/
 echo "downloading pibox-framebuffer $FB_VERSION"
+
 if [[ ! -f $FB_PATH ]]; then
     curl --connect-timeout 10 -sLo $FB_PATH https://github.com/kubesail/pibox-framebuffer/releases/download/$FB_VERSION/pibox-framebuffer-linux-${architecture}-$FB_VERSION
     chmod +x $FB_PATH
-    rm /opt/kubesail/pibox-framebuffer
-    ln -s $FB_PATH /opt/kubesail/pibox-framebuffer
+    if [[ -f /opt/kubesail/pibox-framebuffer ]]; then
+      rm /opt/kubesail/pibox-framebuffer
+    fi
 fi
-chown -R kubesail-agent: /opt/kubesail/
-ls -alh /opt/kubesail/pibox-framebuffer
+if [[ ! -f /opt/kubesail/pibox-framebuffer ]]; then
+  ln -vs $FB_PATH /opt/kubesail/pibox-framebuffer
+fi
+
+chown -R kubesail-agent: /opt/kubesail/ || true
+
+if [[ ! -f /etc/systemd/system/pibox-framebuffer.service ]]; then
+  cat <<'EOF' > /etc/systemd/system/pibox-framebuffer.service
+[Unit]
+Requires=multi-user.target
+After=multi-user.target
+[Service]
+ExecStart=/opt/kubesail/pibox-framebuffer
+Restart=always
+RestartSec=5s
+[Install]
+WantedBy=multi-user.target
+EOF
+  systemctl daemon-reload
+  systemctl enable pibox-framebuffer.service
+fi
+
 echo "starting pibox-framebuffer service"
 service pibox-framebuffer start
