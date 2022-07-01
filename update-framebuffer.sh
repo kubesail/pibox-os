@@ -1,6 +1,7 @@
 #!/bin/bash
 
 set -e
+set -x
 
 FB_VERSION="v$(curl --connect-timeout 10 -L https://raw.githubusercontent.com/kubesail/pibox-framebuffer/main/VERSION.txt)"
 
