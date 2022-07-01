@@ -31,7 +31,7 @@ if [[ ! -f $FB_PATH ]]; then
 fi
 
 if [[ -f /opt/kubesail/pibox-framebuffer ]]; then
-  rm /opt/kubesail/pibox-framebuffer
+  rm -v /opt/kubesail/pibox-framebuffer
 fi
 
 if [[ ! -f /opt/kubesail/pibox-framebuffer ]]; then
