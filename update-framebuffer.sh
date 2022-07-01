@@ -2,7 +2,7 @@
 
 set -e
 
-FB_VERSION=v14
+LATEST_FB_VERSION="v$(curl --connect-timeout 3 -sL https://raw.githubusercontent.com/kubesail/pibox-framebuffer/main/VERSION.txt)"
 
 if [ "$EUID" -ne 0 ]
   then echo "Please run as root"
