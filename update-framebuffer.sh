@@ -9,7 +9,7 @@ fi
 
 if [[ -f /etc/os-release ]]; then
   if grep Debian /etc/os-release; then
-    apt-get install -yqq lvm2
+    apt-get install -yqq lvm2 parted
   fi
 fi
 
