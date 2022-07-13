@@ -1,14 +1,19 @@
 #!/bin/bash
-
-set -e
 set -x
 
 FB_VERSION="v$(curl --connect-timeout 10 -L https://raw.githubusercontent.com/kubesail/pibox-framebuffer/main/VERSION.txt)"
-
 if [ "$EUID" -ne 0 ]
   then echo "Please run as root"
   exit
 fi
+
+if [[ -f /etc/os-release ]]; then
+  if grep Debian /etc/os-release; then
+    apt-get install -yqq lvm2
+  fi
+fi
+
+set -e
 
 if [[ -f /etc/systemd/system/pibox-framebuffer.service ]]; then
   echo "stopping pibox-framebuffer service"
