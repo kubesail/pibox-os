@@ -43,7 +43,7 @@ if [[ ! -f /opt/kubesail/pibox-framebuffer ]]; then
   ln -vs $FB_PATH /opt/kubesail/pibox-framebuffer
 fi
 
-chown -R kubesail-agent: /opt/kubesail/ || true
+chown -R 989: /opt/kubesail/ || true
 
 if [[ ! -f /etc/systemd/system/pibox-framebuffer.service ]]; then
   cat <<'EOF' > /etc/systemd/system/pibox-framebuffer.service
