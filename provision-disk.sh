@@ -34,6 +34,8 @@ for DISK in /dev/sda /dev/sdb /dev/sdc /dev/sdd /dev/sde; do
       echo "${DISK} is not partitioned and has no filesystem signature, adding to volume group"
       # Format the disk as one large Linux partition and create the PV
       echo 'type=83' | sfdisk "${DISK}"
+      # It's important to wait a second to allow the device file to be created (otherwise there is a race condition)
+      sleep 3
       echo n | pvcreate -q "${DISK}1" && {
         DISKS_TO_ADD="${DISK}1 ${DISKS_TO_ADD}"
       }
