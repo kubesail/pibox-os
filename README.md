@@ -39,7 +39,7 @@ dtoverlay=drm-minipitft13,rotate=0,fps=60
 EOF
 
 # Download pibox-framebuffer binary
-sudo bash pibox-framebuffer/update-framebuffer.sh
+sudo bash pibox-os/update-framebuffer.sh
 ```
 
 Then you can follow the instructions here for drawing your own images to the screen https://github.com/kubesail/pibox-framebuffer#pibox-framebuffer
