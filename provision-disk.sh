@@ -47,21 +47,7 @@ for DISK in /dev/sda /dev/sdb /dev/sdc /dev/sdd /dev/sde; do
   fi
 done
 
-# If our VirtualGroup doesn't exist, let's provision for the first time:
-if [[ "$(vgdisplay ${VG_GROUP_NAME})" == "" && "${DISKS_TO_ADD}" != "" ]]; then
-  # curl --unix-socket /var/run/pibox/framebuffer.sock -X POST http://localhost/rgb -XPOST -d '{"R":236, "G": 57, "B": 99}' || true
-  # curl --unix-socket /var/run/pibox/framebuffer.sock -X POST "http://localhost/text?size=38&y=50&content=Formatting+Disks" || true
-  # curl --unix-socket /var/run/pibox/framebuffer.sock -X POST "http://localhost/text?size=26&y=180&content=This+may+take+a+few+minutes" || true
-
-  vgcreate "${VG_GROUP_NAME}" ${DISKS_TO_ADD}
-  # Use 100% of available space
-  lvcreate -n k3s -l "100%FREE" "${VG_GROUP_NAME}"
-  # Create a new EXT4 filesystem with zero reserved space
-  mkfs.ext4 -F -m 0 -b 4096 "/dev/${VG_GROUP_NAME}/k3s"
-  # Enable "fast_commit" https://www.phoronix.com/scan.php?page=news_item&px=EXT4-Fast-Commit-Queued
-  tune2fs -O fast_commit "/dev/${VG_GROUP_NAME}/k3s"
-  # Run a filesystem check to make sure things are OK
-  e2fsck -p -f "/dev/${VG_GROUP_NAME}/k3s"
+function migrateK3s {
   # Add the mount location to /etc/fstab - note that we use data=ordered and journaling, which is potentially
   # slower than 'data=writeback' and `mkfs.ext4 -O ^has_journal`, but safer and more durable against crashes and power-loss
   # fast_commit above helps keep this from being too much of a slowdown
@@ -91,6 +77,26 @@ if [[ "$(vgdisplay ${VG_GROUP_NAME})" == "" && "${DISKS_TO_ADD}" != "" ]]; then
     mkdir -p /var/lib/rancher
     mount /dev/${VG_GROUP_NAME}/k3s
   fi
+}
+
+# If our VirtualGroup doesn't exist, let's provision for the first time:
+if [[ "$(vgdisplay ${VG_GROUP_NAME})" == "" && "${DISKS_TO_ADD}" != "" ]]; then
+  # curl --unix-socket /var/run/pibox/framebuffer.sock -X POST http://localhost/rgb -XPOST -d '{"R":236, "G": 57, "B": 99}' || true
+  # curl --unix-socket /var/run/pibox/framebuffer.sock -X POST "http://localhost/text?size=38&y=50&content=Formatting+Disks" || true
+  # curl --unix-socket /var/run/pibox/framebuffer.sock -X POST "http://localhost/text?size=26&y=180&content=This+may+take+a+few+minutes" || true
+
+  vgcreate "${VG_GROUP_NAME}" ${DISKS_TO_ADD}
+  # Use 100% of available space
+  lvcreate -n k3s -l "100%FREE" "${VG_GROUP_NAME}"
+  # Create a new EXT4 filesystem with zero reserved space
+  mkfs.ext4 -F -m 0 -b 4096 "/dev/${VG_GROUP_NAME}/k3s"
+  # Enable "fast_commit" https://www.phoronix.com/scan.php?page=news_item&px=EXT4-Fast-Commit-Queued
+  tune2fs -O fast_commit "/dev/${VG_GROUP_NAME}/k3s"
+  # Run a filesystem check to make sure things are OK
+  e2fsck -p -f "/dev/${VG_GROUP_NAME}/k3s"
+
+  migrateK3s
+
   # curl --unix-socket /var/run/pibox/framebuffer.sock -X POST http://localhost/rgb -XPOST -d '{"R":0, "G": 255, "B": 0}' || true
   # curl --unix-socket /var/run/pibox/framebuffer.sock -X POST "http://localhost/text?size=38&y=110&content=Done+Formatting!" || true
 elif [[ "${DISKS_TO_ADD}" != "" ]]; then
@@ -98,6 +104,10 @@ elif [[ "${DISKS_TO_ADD}" != "" ]]; then
   vgextend "${VG_GROUP_NAME}" ${DISKS_TO_ADD}
   lvextend -l "100%FREE" /dev/${VG_GROUP_NAME}/k3s
   resize2fs /dev/${VG_GROUP_NAME}/k3s
+elif [[ "$(vgdisplay ${VG_GROUP_NAME})" != "" ]]; then
+  grep "${VG_GROUP_NAME}" /etc/fstab || {
+    migrateK3s
+  }
 else
   echo "No disks to format, continuing. DISKS_TO_ADD was: ${DISKS_TO_ADD}"
 fi
