@@ -11,6 +11,9 @@ if [[ -f /etc/os-release ]]; then
   if grep Debian /etc/os-release > /dev/null; then
     apt-get install -yqq fonts-piboto
   fi
+  if getent passwd 989 > /dev/null; then
+    apt-get install -yqq lvm2 parted
+  fi
 fi
 
 set -e
@@ -41,6 +44,10 @@ fi
 
 if [[ ! -f /opt/kubesail/pibox-framebuffer ]]; then
   ln -vs $FB_PATH /opt/kubesail/pibox-framebuffer
+fi
+
+if getent passwd 989 > /dev/null; then
+  chown -R 989: /opt/kubesail/ || true
 fi
 
 if [[ ! -f /etc/systemd/system/pibox-framebuffer.service ]]; then
