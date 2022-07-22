@@ -1,5 +1,5 @@
 #!/bin/bash
-set -x
+#set -x
 
 FB_VERSION="v$(curl --connect-timeout 10 -L https://raw.githubusercontent.com/kubesail/pibox-framebuffer/main/VERSION.txt)"
 if [ "$EUID" -ne 0 ]
@@ -8,8 +8,8 @@ if [ "$EUID" -ne 0 ]
 fi
 
 if [[ -f /etc/os-release ]]; then
-  if grep Debian /etc/os-release; then
-    apt-get install -yqq lvm2 parted
+  if grep Debian /etc/os-release > /dev/null; then
+    apt-get install -yqq fonts-piboto
   fi
 fi
 
@@ -42,8 +42,6 @@ fi
 if [[ ! -f /opt/kubesail/pibox-framebuffer ]]; then
   ln -vs $FB_PATH /opt/kubesail/pibox-framebuffer
 fi
-
-chown -R 989 /opt/kubesail/ || true
 
 if [[ ! -f /etc/systemd/system/pibox-framebuffer.service ]]; then
   cat <<'EOF' > /etc/systemd/system/pibox-framebuffer.service
