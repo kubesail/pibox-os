@@ -33,6 +33,9 @@ uptime >> ${TMPFILE}
 echo -e "\n\nls -al /opt/kubesail ==============" >> ${TMPFILE}
 ls -al /opt/kubesail/ >> ${TMPFILE}
 
+echo -e "\n\nls -al /var/lib/rancher/k3s/ ==============" >> ${TMPFILE}
+ls -al /var/lib/rancher/k3s/ >> ${TMPFILE}
+
 echo -e "\n\ngrep rancher /etc/fstab ==============" >> ${TMPFILE}
 grep rancher /etc/fstab >> ${TMPFILE}
 
