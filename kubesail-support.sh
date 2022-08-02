@@ -33,6 +33,12 @@ uptime >> ${TMPFILE}
 echo -e "\n\nls -al /opt/kubesail ==============" >> ${TMPFILE}
 ls -al /opt/kubesail/ >> ${TMPFILE}
 
+echo -e "\n\ngrep rancher /etc/fstab ==============" >> ${TMPFILE}
+grep rancher /etc/fstab >> ${TMPFILE}
+
+echo -e "\n\nfindmnt -s ==============" >> ${TMPFILE}
+findmnt -s >> ${TMPFILE}
+
 echo -e "\n\nkubectl version ==============" >> ${TMPFILE}
 ${KUBECTL} version >> ${TMPFILE}
 
