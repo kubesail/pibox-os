@@ -45,14 +45,14 @@ sudo k3s --version >> ${TMPFILE}
 echo -e "\n\nk3s ctr images ls ==============" >> ${TMPFILE}
 sudo k3s ctr images ls >> ${TMPFILE}
 
+echo -e "\n\nservice k3s status ==============" >> ${TMPFILE}
+sudo service k3s status >> ${TMPFILE}
+
 echo -e "\n\nkubectl get nodes ==============" >> ${TMPFILE}
 ${KUBECTL} get nodes >> ${TMPFILE}
 
 echo -e "\n\nkubectl -n kube-system get pods ==============" >> ${TMPFILE}
 ${KUBECTL} -n kube-system get pods >> ${TMPFILE}
-
-echo -e "\n\nkubectl -n kube-system describe traefik ==============" >> ${TMPFILE}
-${KUBECTL} -n kube-system describe pod -l "app.kubernetes.io/name=traefik" >> ${TMPFILE}
 
 echo -e "\n\nkubectl -n kubesail-agent describe pods ==============" >> ${TMPFILE}
 ${KUBECTL} -n kubesail-agent describe pods >> ${TMPFILE}
