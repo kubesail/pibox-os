@@ -48,6 +48,9 @@ sudo k3s ctr images ls >> ${TMPFILE}
 echo -e "\n\nservice k3s status ==============" >> ${TMPFILE}
 sudo service k3s status >> ${TMPFILE}
 
+echo -e "\n\nls -la /etc/systemd/system/k3s.service.d/ ==============" >> ${TMPFILE}
+sudo ls -al /etc/systemd/system/k3s.service.d/ >> ${TMPFILE}
+
 echo -e "\n\nkubectl get nodes ==============" >> ${TMPFILE}
 ${KUBECTL} get nodes >> ${TMPFILE}
 
