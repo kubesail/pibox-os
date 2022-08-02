@@ -30,6 +30,9 @@ echo -e "\n\nMemory / load ==============" >> ${TMPFILE}
 free -m >> ${TMPFILE}
 uptime >> ${TMPFILE}
 
+echo -e "\n\nls -al /opt/kubesail ==============" >> ${TMPFILE}
+ls -al /opt/kubesail/ >> ${TMPFILE}
+
 echo -e "\n\nkubectl version ==============" >> ${TMPFILE}
 ${KUBECTL} version >> ${TMPFILE}
 
