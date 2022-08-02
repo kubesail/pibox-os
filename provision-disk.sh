@@ -52,7 +52,7 @@ function migrateK3s {
   # slower than 'data=writeback' and `mkfs.ext4 -O ^has_journal`, but safer and more durable against crashes and power-loss
   # fast_commit above helps keep this from being too much of a slowdown
   echo "/dev/${VG_GROUP_NAME}/k3s /var/lib/rancher ext4 defaults,discard,nofail,noatime,data=ordered,errors=remount-ro 0 0" >> /etc/fstab
-  echo -e "[Unit]\nAfter=var-lib-rancher.mount" > /etc/systemd/system/k3s.service.d/mount.conf
+  echo -e "[Unit]\nAfter=var-lib-rancher.mount\nRequires=var-lib-rancher.mount" > /etc/systemd/system/k3s.service.d/mount.conf
   systemctl daemon-reload
 
   # Migrate K3S if it exists (move /var/lib/rancher onto new LVM group)
