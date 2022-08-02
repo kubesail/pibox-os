@@ -42,6 +42,9 @@ grep rancher /etc/fstab >> ${TMPFILE}
 echo -e "\n\nfindmnt -s ==============" >> ${TMPFILE}
 findmnt -s >> ${TMPFILE}
 
+echo -e "\n\nsystemctl status var-lib-rancher.mount ==============" >> ${TMPFILE}
+systemctl status var-lib-rancher.mount >> ${TMPFILE}
+
 echo -e "\n\nkubectl version ==============" >> ${TMPFILE}
 ${KUBECTL} version >> ${TMPFILE}
 
