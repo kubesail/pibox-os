@@ -24,7 +24,7 @@ fi
 echo -e "\n\nKernel ==============\n $(uname -a)" >> ${TMPFILE}
 
 echo -e "\n\nCPU model ==============" >> ${TMPFILE}
-cat /proc/cpuinfo | fgrep 'model name' | uniq >> ${TMPFILE}
+cat /proc/cpuinfo | fgrep 'model' | uniq >> ${TMPFILE}
 
 echo -e "\n\nMemory / load / file-nr ==============" >> ${TMPFILE}
 free -m >> ${TMPFILE}
