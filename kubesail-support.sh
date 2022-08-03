@@ -26,9 +26,10 @@ echo -e "\n\nKernel ==============\n $(uname -a)" >> ${TMPFILE}
 echo -e "\n\nCPU model ==============" >> ${TMPFILE}
 cat /proc/cpuinfo | fgrep 'model name' | uniq >> ${TMPFILE}
 
-echo -e "\n\nMemory / load ==============" >> ${TMPFILE}
+echo -e "\n\nMemory / load / file-nr ==============" >> ${TMPFILE}
 free -m >> ${TMPFILE}
 uptime >> ${TMPFILE}
+cat /proc/sys/fs/file-nr
 
 echo -e "\n\nls -al /opt/kubesail ==============" >> ${TMPFILE}
 ls -al /opt/kubesail/ >> ${TMPFILE}
