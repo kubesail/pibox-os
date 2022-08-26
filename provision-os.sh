@@ -115,7 +115,7 @@ rm -rf linux-arm64 helm.tar.gz
 mkdir -p /opt/kubesail/
 curl -sLo /opt/kubesail/provision-disk.sh https://raw.githubusercontent.com/kubesail/pibox-os/main/provision-disk.sh
 chmod +x /opt/kubesail/provision-disk.sh
-/opt/kubesail/provision-disk.sh
+# /opt/kubesail/provision-disk.sh
 # Run disk provisioner before K3s starts
 mkdir -p /etc/systemd/system/k3s.service.d
 echo -e "[Service]\nExecStartPre=/opt/kubesail/provision-disk.sh" > /etc/systemd/system/k3s.service.d/pre-exec.conf
