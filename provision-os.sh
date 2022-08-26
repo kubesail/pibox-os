@@ -30,7 +30,10 @@ apt-get autoclean -yqq
 apt-get install -yqq vim lvm2 openssh-server raspberrypi-kernel-headers samba samba-common-bin
 apt-get remove -yqq iptables nftables
 
-# reboot
+if [ -f /var/run/reboot-required ]; then
+  echo 'PLEASE REBOOT TO ACTIVATE NEW KERNEL'
+  exit 0
+fi
 
 # Set up samba share
 mkdir -p /var/lib/rancher/k3s/storage
