@@ -63,8 +63,8 @@ if [[ ! -d /var/lib/rancher/k3s/data ]]; then
   screen_timer &
   SCREEN_TIMER_PID=$!
 
-  kubectl -n kube-system wait --for=condition=ready --timeout=120s pod -l k8s-app=kube-dns || kubernetes_failed_to_boot
-  kubectl -n kube-system wait --for=condition=ready --timeout=120s pod -l k8s-app=metrics-server || kubernetes_failed_to_boot
+  kubectl -n kube-system wait --for=condition=ready --timeout=180s pod -l k8s-app=kube-dns || kubernetes_failed_to_boot
+  kubectl -n kube-system wait --for=condition=ready --timeout=180s pod -l k8s-app=metrics-server || kubernetes_failed_to_boot
 
   if [[ "$(kubectl -n kube-system get pods | sed 1d | egrep -v '(Completed|Running)')" != "" ]]; then
     kubernetes_failed_to_boot
