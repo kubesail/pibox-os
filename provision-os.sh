@@ -82,14 +82,7 @@ popd
 # Enable Display Driver
 pushd pibox-os/st7789_module
 make
-
-if [ -f /lib/modules/"$(uname -r)"/kernel/drivers/staging/fbtft/fb_st7789v.ko ]; then
-  mv /lib/modules/"$(uname -r)"/kernel/drivers/staging/fbtft/fb_st7789v.ko /lib/modules/"$(uname -r)"/kernel/drivers/staging/fbtft/fb_st7789v.ko.xz.BACK
-fi
-if [ -f /lib/modules/"$(uname -r)"/kernel/drivers/staging/fbtft/fb_st7789v.ko.xz ]; then
-  mv /lib/modules/"$(uname -r)"/kernel/drivers/staging/fbtft/fb_st7789v.ko.xz /lib/modules/"$(uname -r)"/kernel/drivers/staging/fbtft/fb_st7789v.ko.xz.BACK
-fi
-mv fb_st7789v.ko /lib/modules/"$(uname -r)"/kernel/drivers/staging/fbtft/fb_st7789v.ko
+make install
 popd
 dtc --warning no-unit_address_vs_reg -I dts -O dtb -o /boot/overlays/drm-minipitft13.dtbo pibox-os/overlays/minipitft13-overlay.dts
 cat <<EOF >> /boot/config.txt
