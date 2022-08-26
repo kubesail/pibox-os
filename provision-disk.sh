@@ -10,6 +10,7 @@ DISKS_TO_ADD=""
 
 # To undo this entire script or to test:
 # service k3s stop
+# killall containerd-shim
 # umount -l /var/lib/rancher
 # umount -l /var/lib/rancher-ssd
 # wipefs -af /dev/pibox-group/k3s
