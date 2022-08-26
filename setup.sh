@@ -2,6 +2,7 @@
 
 useradd -u 989 --system --shell=/usr/sbin/nologin kubesail-agent
 mkdir -p /opt/kubesail/
+chown -R 989 /opt/kubesail/
 
 # Install KubeSail Debug helper
 curl -sLo /usr/local/bin/kubesail-support https://raw.githubusercontent.com/kubesail/pibox-os/main/kubesail-support.sh
