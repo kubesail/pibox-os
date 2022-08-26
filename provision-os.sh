@@ -44,6 +44,10 @@ directory mask=0777
 public=no
 EOF
 
+curl -sLo /opt/kubesail/update-framebuffer.sh https://raw.githubusercontent.com/kubesail/pibox-os/main/update-framebuffer.sh
+chmod +x /opt/kubesail/update-framebuffer.sh
+/opt/kubesail/update-framebuffer.sh
+
 # Reduce logging and store in memory to reduce EMMC wear
 sed -i 's/.MaxLevelStore.*/MaxLevelStore=info/' /etc/systemd/journald.conf
 sed -i 's/.MaxLevelSyslog.*/MaxLevelSyslog=info/' /etc/systemd/journald.conf
