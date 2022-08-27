@@ -149,6 +149,23 @@ touch /boot/refresh-ssh-certs
 rm -vf /home/pi/.ssh/*
 sed -i s/PasswordAuthentication\ no/PasswordAuthentication\ yes/ /etc/ssh/sshd_config
 
+curl --connect-timeout 10 --retry 5 --retry-delay 3 -L https://get.k3s.io | INSTALL_K3S_CHANNEL=stable INSTALL_K3S_EXEC="server --no-deploy traefik --disable=traefik --kubelet-arg container-log-max-files=3 --kubelet-arg container-log-max-size=10Mi" sh
+until kubectl -n kube-system get pod -l k8s-app="kube-dns" -o=jsonpath='{.items[0].metadata.name}' >/dev/null 2>&1; do
+  echo "Waiting for pod"
+  sleep 1
+done
+kubectl -n kube-system wait --for=condition=ready --timeout=180s pod -l k8s-app=kube-dns || kubernetes_failed_to_boot
+kubectl -n kube-system wait --for=condition=ready --timeout=180s pod -l k8s-app=metrics-server || kubernetes_failed_to_boot
+k3s ctr i pull kubesail/agent:v0.72.2
+/usr/local/bin/k3s-killall.sh
+rm -rf /var/lib/rancher/k3s/server
+rm -rf /var/lib/rancher/k3s/agent/client*
+rm -rf /var/lib/rancher/k3s/agent/etc
+rm -rf /var/lib/rancher/k3s/agent/*.kubeconfig
+rm -rf /var/lib/rancher/k3s/agent/pod-manifests/
+rm -rf /var/lib/rancher/k3s/agent/*.crt
+rm -rf /var/lib/rancher/k3s/agent/*.key
+
 # Clean bash history
 history -c && history -w
 exit
