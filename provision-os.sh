@@ -30,6 +30,11 @@ apt-get autoclean -yqq
 apt-get install -yqq vim lvm2 openssh-server raspberrypi-kernel-headers samba samba-common-bin
 apt-get remove -yqq iptables nftables
 
+# Kernel settings
+grep -qxF 'cgroup_enable=memory cgroup_memory=1' /boot/cmdline.txt || sed -i 's/$/ cgroup_enable=memory cgroup_memory=1/' /boot/cmdline.txt
+# Show text output during startup / shutdown (useful if reboot hangs)
+sed -i 's/quiet splash plymouth.ignore-serial-consoles//' /boot/cmdline.txt
+
 if [ -f /var/run/reboot-required ]; then
   echo 'PLEASE REBOOT TO ACTIVATE NEW KERNEL'
   exit 0
@@ -94,11 +99,6 @@ EOF
 
 # Remove PiBox repo
 rm -rf pibox-os
-
-# Kernel settings
-grep -qxF 'cgroup_enable=memory cgroup_memory=1' /boot/cmdline.txt || sed -i 's/$/ cgroup_enable=memory cgroup_memory=1/' /boot/cmdline.txt
-# Show text output during startup / shutdown (useful if reboot hangs)
-sed -i 's/quiet splash plymouth.ignore-serial-consoles//' /boot/cmdline.txt
 
 # Sysctl & limits
 echo "vm.swappiness=1" >> /etc/sysctl.conf
