@@ -154,8 +154,8 @@ until kubectl -n kube-system get pod -l k8s-app="kube-dns" -o=jsonpath='{.items[
   echo "Waiting for pod"
   sleep 1
 done
-kubectl -n kube-system wait --for=condition=ready --timeout=180s pod -l k8s-app=kube-dns || kubernetes_failed_to_boot
-kubectl -n kube-system wait --for=condition=ready --timeout=180s pod -l k8s-app=metrics-server || kubernetes_failed_to_boot
+kubectl -n kube-system wait --for=condition=ready --timeout=180s pod -l k8s-app=kube-dns
+kubectl -n kube-system wait --for=condition=ready --timeout=180s pod -l k8s-app=metrics-server
 k3s ctr i pull kubesail/agent:v0.72.2
 /usr/local/bin/k3s-killall.sh
 rm -rfv /var/lib/rancher/k3s/server
