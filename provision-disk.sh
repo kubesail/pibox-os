@@ -23,6 +23,7 @@ DISKS_TO_ADD=""
 # sfdisk --delete /dev/sdb 1
 # wipefs -a /dev/sda
 # wipefs -a /dev/sdb
+# //// delete k3s fstab mount dependency 
 
 echo "Running provision-disk.sh"
 
