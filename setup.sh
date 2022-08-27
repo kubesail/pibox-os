@@ -37,7 +37,7 @@ if [[ -f $PATH_REFRESH_SSH_CERTS ]]; then
 fi
 
 # Install K3s and KubeSail agent
-if [[ ! -d /var/lib/rancher/k3s/data ]]; then
+if [[ ! -d /var/lib/rancher/k3s/server ]]; then
   echo "Installing k3s and KubeSail agent"
   curl --unix-socket /var/run/pibox/framebuffer.sock "http://localhost/text?content=Installing+k3s&background=000000&size=46&color=ffffff"
   service k3s start
