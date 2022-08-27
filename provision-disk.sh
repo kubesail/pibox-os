@@ -55,6 +55,8 @@ function migrateK3s {
   echo "/dev/${VG_GROUP_NAME}/k3s /var/lib/rancher ext4 defaults,discard,nofail,noatime,data=ordered,errors=remount-ro 0 0" >> /etc/fstab
   mkdir -p /etc/systemd/system/k3s.service.d/ || echo "Directory already exists"
   echo -e "[Unit]\nAfter=var-lib-rancher.mount\nRequires=var-lib-rancher.mount" > /etc/systemd/system/k3s.service.d/mount.conf
+  mkdir -p /etc/systemd/system/pibox-first-boot.service.d/ || echo "Directory already exists"
+  echo -e "[Unit]\nAfter=var-lib-rancher.mount\nRequires=var-lib-rancher.mount" > /etc/systemd/system/pibox-first-boot.service.d/mount.conf
   systemctl daemon-reload
 
   # Migrate K3S if it exists (move /var/lib/rancher onto new LVM group)
