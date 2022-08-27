@@ -93,6 +93,7 @@ ExecStart=/opt/kubesail/pibox-first-boot.sh
 [Unit]
 After=network-online.target
 Wants=network-online.target
+Before=sshd.service
 [Install]
 WantedBy=default.target
 EOF
