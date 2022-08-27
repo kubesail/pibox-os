@@ -90,6 +90,9 @@ cat <<'EOF' > /etc/systemd/system/pibox-first-boot.service
 Restart=on-failure
 RestartSec=5
 ExecStart=/opt/kubesail/pibox-first-boot.sh
+[Unit]
+After=network-online.target
+Wants=network-online.target
 [Install]
 WantedBy=default.target
 EOF
