@@ -63,6 +63,11 @@ if [[ ! -d /var/lib/rancher/k3s/data ]]; then
   screen_timer &
   SCREEN_TIMER_PID=$!
 
+  until kubectl -n kube-system get pod -l k8s-app="kube-dns" -o=jsonpath='{.items[0].metadata.name}' >/dev/null 2>&1; do
+    echo "Waiting for pod"
+    sleep 1
+  done
+
   kubectl -n kube-system wait --for=condition=ready --timeout=180s pod -l k8s-app=kube-dns || kubernetes_failed_to_boot
   kubectl -n kube-system wait --for=condition=ready --timeout=180s pod -l k8s-app=metrics-server || kubernetes_failed_to_boot
 
