@@ -167,6 +167,14 @@ rm -rfv /var/lib/rancher/k3s/agent/*.crt
 rm -rfv /var/lib/rancher/k3s/agent/*.key
 rm -rfv /etc/rancher/k3s/k3s.yaml
 
+echo '' > /var/log/lastlog
+echo '' > /var/log/kern.log
+echo '' > /var/log/syslog
+echo '' > /var/log/user.log
+echo '' > /var/log/faillog
+echo '' > /var/log/messages
+echo '' > /var/log/auth.log
+
 # Clean bash history
 history -c && history -w
 exit
