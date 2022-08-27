@@ -158,13 +158,14 @@ kubectl -n kube-system wait --for=condition=ready --timeout=180s pod -l k8s-app=
 kubectl -n kube-system wait --for=condition=ready --timeout=180s pod -l k8s-app=metrics-server || kubernetes_failed_to_boot
 k3s ctr i pull kubesail/agent:v0.72.2
 /usr/local/bin/k3s-killall.sh
-rm -rf /var/lib/rancher/k3s/server
-rm -rf /var/lib/rancher/k3s/agent/client*
-rm -rf /var/lib/rancher/k3s/agent/etc
-rm -rf /var/lib/rancher/k3s/agent/*.kubeconfig
-rm -rf /var/lib/rancher/k3s/agent/pod-manifests/
-rm -rf /var/lib/rancher/k3s/agent/*.crt
-rm -rf /var/lib/rancher/k3s/agent/*.key
+rm -rfv /var/lib/rancher/k3s/server
+rm -rfv /var/lib/rancher/k3s/agent/client*
+rm -rfv /var/lib/rancher/k3s/agent/etc
+rm -rfv /var/lib/rancher/k3s/agent/*.kubeconfig
+rm -rfv /var/lib/rancher/k3s/agent/pod-manifests/
+rm -rfv /var/lib/rancher/k3s/agent/*.crt
+rm -rfv /var/lib/rancher/k3s/agent/*.key
+rm -rfv /etc/rancher/k3s/k3s.yaml
 
 # Clean bash history
 history -c && history -w
