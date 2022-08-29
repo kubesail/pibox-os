@@ -11,15 +11,15 @@ hostnamectl set-hostname pibox
 sed -i 's/raspberrypi/pibox/' /etc/hosts
 
 # Unlimited bash history https://stackoverflow.com/a/19533853
-# sed -i 's/HISTSIZE=1000//' /home/pi/.bashrc
-# sed -i 's/HISTFILESIZE=2000//' /home/pi/.bashrc
-# cat <<EOF >> /home/pi/.bashrc
-# export HISTFILESIZE=
-# export HISTSIZE=
-# export HISTTIMEFORMAT="[%F %T] "
-# export HISTFILE=~/.bash_eternal_history
-# PROMPT_COMMAND="history -a; \$PROMPT_COMMAND"
-# EOF
+sed -i 's/HISTSIZE=1000//' /home/pi/.bashrc
+sed -i 's/HISTFILESIZE=2000//' /home/pi/.bashrc
+cat <<EOF >> /home/pi/.bashrc
+export HISTFILESIZE=
+export HISTSIZE=
+export HISTTIMEFORMAT="[%F %T] "
+export HISTFILE=~/.bash_eternal_history
+PROMPT_COMMAND="history -a; \$PROMPT_COMMAND"
+EOF
 
 cp /home/pi/.bashrc /root/.bashrc
 
