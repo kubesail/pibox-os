@@ -82,6 +82,9 @@ ${KUBECTL} -n kubesail-agent describe pods >> ${TMPFILE}
 echo -e "\n\nkubectl -n kubesail-agent logs -l app=kubesail-agent ==============" >> ${TMPFILE}
 ${KUBECTL} -n kubesail-agent logs -l app=kubesail-agent --tail=-1 >> ${TMPFILE}
 
+echo -e "\n\njournalctl -u pibox-framebuffer -n 200 ==============" >> ${TMPFILE}
+journalctl -u pibox-framebuffer -n 200 >> ${TMPFILE}
+
 echo "Wrote logs to ${TMPFILE}"
 gzip ${TMPFILE}
 
