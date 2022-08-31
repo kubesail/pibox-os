@@ -89,4 +89,17 @@ echo "Wrote logs to ${TMPFILE}"
 gzip ${TMPFILE}
 
 curl -s -H "Content-Type: application/json" -X POST --data-binary @${TMPFILE}.gz "https://api.kubesail.com/agent/upload-debug-logs/${KUBESAIL_AGENT_KEY}/${RANDOM_KEY}"
+
+kubectl get pods -A | grep Unknown && {
+  read -p "It looks like there is an issue we know how to fix automatically. Run fix-it script? [Y/N]" -n 1 -r
+  echo    # (optional) move to a new line
+  if [[ ! $REPLY =~ ^[Yy]$ ]]
+  then
+      exit 1
+  fi
+  for i in $(sudo k3s ctr c ls | awk '{print $1}'); do sudo k3s ctr c rm $i; done
+  sudo service k3s restart
+  echo "All done - things should be back up and running in just a moment"
+}
+
 echo -e "\nUploaded logs to KubeSail support. Please provide the code \"${RANDOM_KEY}\" - thank you"
