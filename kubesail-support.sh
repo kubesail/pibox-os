@@ -92,7 +92,7 @@ curl -s -H "Content-Type: application/json" -X POST --data-binary @${TMPFILE}.gz
 
 kubectl get pods -A | grep Unknown && {
   read -p "It looks like there is an issue we know how to fix automatically. Run fix-it script? [Y/N]" -n 1 -r
-  echo    # (optional) move to a new line
+  echo
   if [[ ! $REPLY =~ ^[Yy]$ ]]
   then
       exit 1
