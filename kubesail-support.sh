@@ -85,6 +85,12 @@ ${KUBECTL} -n kubesail-agent logs -l app=kubesail-agent --tail=-1 >> ${TMPFILE}
 echo -e "\n\njournalctl -u pibox-framebuffer -n 200 ==============" >> ${TMPFILE}
 journalctl -u pibox-framebuffer -n 200 >> ${TMPFILE}
 
+echo -e "\n\nlvdisplay ==============" >> ${TMPFILE}
+sudo lvdisplay >> ${TMPFILE}
+
+echo -e "\n\npvdisplay ==============" >> ${TMPFILE}
+sudo pvdisplay >> ${TMPFILE}
+
 echo "Wrote logs to ${TMPFILE}"
 gzip ${TMPFILE}
 
