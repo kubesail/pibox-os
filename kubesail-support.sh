@@ -108,3 +108,14 @@ kubectl get pods -A | grep Unknown && {
   sudo service k3s restart
   echo "All done - things should be back up and running in just a moment"
 }
+
+kubectl get namespaces kubesail-agent || {
+  read -p "It looks like the KubeSail agent may not be installed properly. Would you like to fix it? [Y/N]" -n 1 -r
+  echo
+  if [[ ! $REPLY =~ ^[Yy]$ ]]
+  then
+      exit 1
+  fi
+  sudo kubectl create -f https://api.kubesail.com/byoc
+  echo "QR Code should appear in just a few moments"
+}
