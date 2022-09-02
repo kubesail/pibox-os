@@ -156,7 +156,7 @@ until kubectl -n kube-system get pod -l k8s-app="kube-dns" -o=jsonpath='{.items[
 done
 kubectl -n kube-system wait --for=condition=ready --timeout=180s pod -l k8s-app=kube-dns
 kubectl -n kube-system wait --for=condition=ready --timeout=180s pod -l k8s-app=metrics-server
-k3s ctr i pull docker.io/kubesail/agent:v0.72.2
+k3s ctr i pull docker.io/kubesail/agent:v0.73.0
 /usr/local/bin/k3s-killall.sh
 rm -rfv /var/lib/rancher/k3s/server
 rm -rfv /var/lib/rancher/k3s/agent/client*
