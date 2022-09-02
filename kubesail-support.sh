@@ -61,8 +61,8 @@ journalctl -u k3s -n 25 --no-tail --no-pager >> ${TMPFILE}
 echo -e "\n\nk3s --version ==============" >> ${TMPFILE}
 sudo k3s --version >> ${TMPFILE}
 
-echo -e "\n\nk3s ctr images ls ==============" >> ${TMPFILE}
-sudo k3s ctr images ls >> ${TMPFILE}
+# echo -e "\n\nk3s ctr images ls ==============" >> ${TMPFILE}
+# sudo k3s ctr images ls >> ${TMPFILE}
 
 echo -e "\n\nservice k3s status ==============" >> ${TMPFILE}
 sudo service k3s status >> ${TMPFILE}
