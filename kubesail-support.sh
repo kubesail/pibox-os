@@ -73,8 +73,8 @@ sudo ls -al /etc/systemd/system/k3s.service.d/ >> ${TMPFILE}
 echo -e "\n\nkubectl get nodes ==============" >> ${TMPFILE}
 ${KUBECTL} get nodes >> ${TMPFILE}
 
-echo -e "\n\nkubectl -n kube-system get pods ==============" >> ${TMPFILE}
-${KUBECTL} -n kube-system get pods >> ${TMPFILE}
+echo -e "\n\nkubectl get pods -A ==============" >> ${TMPFILE}
+${KUBECTL} get pods -A >> ${TMPFILE}
 
 echo -e "\n\nkubectl -n kubesail-agent describe pods ==============" >> ${TMPFILE}
 ${KUBECTL} -n kubesail-agent describe pods >> ${TMPFILE}
