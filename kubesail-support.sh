@@ -91,6 +91,9 @@ sudo lvdisplay >> ${TMPFILE}
 echo -e "\n\npvdisplay ==============" >> ${TMPFILE}
 sudo pvdisplay >> ${TMPFILE}
 
+echo -e "\n\nifconfig ==============" >> ${TMPFILE}
+sudo ifconfig >> ${TMPFILE}
+
 echo "Wrote logs to ${TMPFILE}"
 gzip ${TMPFILE}
 
