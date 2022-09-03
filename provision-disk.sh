@@ -38,7 +38,7 @@ for DISK in /dev/sda /dev/sdb /dev/sdc /dev/sdd /dev/sde; do
       echo 'type=83' | sfdisk "${DISK}"
       # It's important to wait a second to allow the device file to be created (otherwise there is a race condition)
       sleep 3
-      echo n | pvcreate -q "${DISK}1" && {
+      echo n | pvcreate -y -q "${DISK}1" && {
         DISKS_TO_ADD="${DISK}1 ${DISKS_TO_ADD}"
       }
     else
