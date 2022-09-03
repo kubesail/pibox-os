@@ -97,7 +97,7 @@ gzip ${TMPFILE}
 curl -s -H "Content-Type: application/json" -X POST --data-binary @${TMPFILE}.gz "https://api.kubesail.com/agent/upload-debug-logs/${KUBESAIL_AGENT_KEY}/${RANDOM_KEY}"
 echo -e "\nUploaded logs to KubeSail support. Please provide the code \"${RANDOM_KEY}\" - thank you"
 
-kubectl get pods -A | grep Unknown && {
+sudo kubectl get pods -A | grep Unknown && {
   read -p "It looks like there is an issue we know how to fix automatically. Run fix-it script? [Y/N]" -n 1 -r
   echo
   if [[ ! $REPLY =~ ^[Yy]$ ]]
