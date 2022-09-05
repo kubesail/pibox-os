@@ -66,7 +66,7 @@ sed -i "s/#Storage.*/Storage=volatile/" /etc/systemd/journald.conf
 systemctl restart systemd-journald.service
 
 # Add tmpfs at /tmp to reduce EMMC wear
-echo "tmpfs /var/tmp tmpfs defaults,noatime,nosuid,nodev,noexec,mode=0755,size=1M 0 0" >> /etc/fstab
+echo "tmpfs /var/tmp tmpfs defaults,noatime,nosuid,nodev,noexec,mode=0755,size=64M 0 0" >> /etc/fstab
 
 # Clone PiBox OS repo for building fan/display drivers
 rm -rf pibox-os
