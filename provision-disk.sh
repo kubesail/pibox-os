@@ -19,6 +19,8 @@ DISKS_TO_ADD=""
 # vgremove pibox-group
 # pvremove /dev/sda1
 # pvremove /dev/sdb1
+# wipefs -a /dev/sda1
+# wipefs -a /dev/sdb1
 # sfdisk --delete /dev/sda 1
 # sfdisk --delete /dev/sdb 1
 # wipefs -a /dev/sda
@@ -92,7 +94,7 @@ if [[ "$(vgdisplay ${VG_GROUP_NAME})" == "" && "${DISKS_TO_ADD}" != "" ]]; then
 
   vgcreate "${VG_GROUP_NAME}" ${DISKS_TO_ADD}
   # Use 100% of available space
-  lvcreate -n k3s -l "100%FREE" "${VG_GROUP_NAME}"
+  lvcreate -y -n k3s -l "100%FREE" "${VG_GROUP_NAME}"
   # Create a new EXT4 filesystem with zero reserved space
   mkfs.ext4 -F -m 0 -b 4096 "/dev/${VG_GROUP_NAME}/k3s"
   # Enable "fast_commit" https://www.phoronix.com/scan.php?page=news_item&px=EXT4-Fast-Commit-Queued
