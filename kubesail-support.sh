@@ -14,40 +14,43 @@ echo "Support script starting - this may take a moment."
 
 if [ -f /etc/pibox-release ]; then
     echo -e "\n\nPiBox version ==============" >> ${TMPFILE}
-    cat /etc/pibox-release >> ${TMPFILE}
+    sudo cat /etc/pibox-release >> ${TMPFILE}
 fi
 if [ -f /etc/os-release ]; then
     echo -e "\n\nOS version ==============" >> ${TMPFILE}
-    cat /etc/os-release >> ${TMPFILE}
+    sudo cat /etc/os-release >> ${TMPFILE}
 fi
 
 echo -e "\n\nKernel ==============\n $(uname -a)" >> ${TMPFILE}
 
 echo -e "\n\nCPU model ==============" >> ${TMPFILE}
-cat /proc/cpuinfo | fgrep 'model' | uniq >> ${TMPFILE}
+sudo cat /proc/cpuinfo | fgrep 'model' | uniq >> ${TMPFILE}
 
 echo -e "\n\nMemory / load / file-nr ==============" >> ${TMPFILE}
-free -m >> ${TMPFILE}
-uptime >> ${TMPFILE}
-cat /proc/sys/fs/file-nr
+sudo free -m >> ${TMPFILE}
+sudo uptime >> ${TMPFILE}
+sudo cat /proc/sys/fs/file-nr
 
 echo -e "\n\nls -al /opt/kubesail ==============" >> ${TMPFILE}
-ls -al /opt/kubesail/ >> ${TMPFILE}
+sudo ls -al /opt/kubesail/ >> ${TMPFILE}
 
 echo -e "\n\nls -al /var/lib/rancher/k3s/ ==============" >> ${TMPFILE}
-ls -al /var/lib/rancher/k3s/ >> ${TMPFILE}
+sudo ls -al /var/lib/rancher/k3s/ >> ${TMPFILE}
 
 echo -e "\n\ngrep rancher /etc/fstab ==============" >> ${TMPFILE}
-grep rancher /etc/fstab >> ${TMPFILE}
+sudo grep rancher /etc/fstab >> ${TMPFILE}
 
 echo -e "\n\nfindmnt -s ==============" >> ${TMPFILE}
-findmnt -s >> ${TMPFILE}
+sudo findmnt -s >> ${TMPFILE}
 
 echo -e "\n\nfindmnt /var/lib/rancher ==============" >> ${TMPFILE}
-findmnt /var/lib/rancher >> ${TMPFILE}
+sudo findmnt /var/lib/rancher >> ${TMPFILE}
+
+echo -e "\n\ndf -h ==============" >> ${TMPFILE}
+sudo df -h | egrep -v "(containerd|kubernetes|overlay)" >> ${TMPFILE}
 
 echo -e "\n\nsystemctl status var-lib-rancher.mount ==============" >> ${TMPFILE}
-systemctl status var-lib-rancher.mount >> ${TMPFILE}
+sudo systemctl status var-lib-rancher.mount >> ${TMPFILE}
 
 echo -e "\n\nkubectl version ==============" >> ${TMPFILE}
 ${KUBECTL} version >> ${TMPFILE}
@@ -56,7 +59,7 @@ echo -e "\n\nk3s check-config ==============" >> ${TMPFILE}
 sudo k3s check-config >> ${TMPFILE}
 
 echo -e "\n\nk3s logs ==============" >> ${TMPFILE}
-journalctl -u k3s -n 25 --no-tail --no-pager >> ${TMPFILE}
+sudo journalctl -u k3s -n 25 --no-tail --no-pager >> ${TMPFILE}
 
 echo -e "\n\nk3s --version ==============" >> ${TMPFILE}
 sudo k3s --version >> ${TMPFILE}
@@ -83,7 +86,7 @@ echo -e "\n\nkubectl -n kubesail-agent logs -l app=kubesail-agent ==============
 ${KUBECTL} -n kubesail-agent logs -l app=kubesail-agent --tail=-1 >> ${TMPFILE}
 
 echo -e "\n\njournalctl -u pibox-framebuffer -n 200 ==============" >> ${TMPFILE}
-journalctl -u pibox-framebuffer -n 200 >> ${TMPFILE}
+sudo journalctl -u pibox-framebuffer -n 200 >> ${TMPFILE}
 
 echo -e "\n\nlvdisplay ==============" >> ${TMPFILE}
 sudo lvdisplay >> ${TMPFILE}
@@ -112,7 +115,7 @@ sudo kubectl get pods -A | grep Unknown && {
   echo "All done - things should be back up and running in just a moment"
 }
 
-kubectl get namespaces kubesail-agent || {
+sudo kubectl get namespaces kubesail-agent || {
   read -p "It looks like the KubeSail agent may not be installed properly. Would you like to fix it? [Y/N]" -n 1 -r
   echo
   if [[ ! $REPLY =~ ^[Yy]$ ]]
