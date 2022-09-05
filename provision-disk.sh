@@ -107,7 +107,7 @@ if [[ "$(vgdisplay ${VG_GROUP_NAME})" == "" && "${DISKS_TO_ADD}" != "" ]]; then
 elif [[ "${DISKS_TO_ADD}" != "" ]]; then
   echo "Extending disk array, adding: ${DISKS_TO_ADD}"
   vgextend "${VG_GROUP_NAME}" ${DISKS_TO_ADD}
-  lvextend -l "100%FREE" /dev/${VG_GROUP_NAME}/k3s
+  lvextend -l +"100%FREE" /dev/${VG_GROUP_NAME}/k3s
   resize2fs /dev/${VG_GROUP_NAME}/k3s
 elif [[ "$(vgdisplay ${VG_GROUP_NAME})" != "" ]]; then
   grep "${VG_GROUP_NAME}" /etc/fstab || {
