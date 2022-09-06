@@ -3,6 +3,8 @@
 
 # -*- coding: utf-8 -*-
 
+### WARNING: THIS IS OUTDATED! We've rewritten this in Go. Please see https://github.com/kubesail/pibox-framebuffer/blob/main/main.go
+
 import sys
 import io
 import time
