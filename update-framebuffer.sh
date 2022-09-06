@@ -9,7 +9,7 @@ fi
 
 if [[ -f /etc/os-release ]]; then
   if grep Debian /etc/os-release; then
-    apt-get install -yqq lvm2 parted
+    apt-get install -yqq lvm2 parted fonts-piboto
   fi
 fi
 
