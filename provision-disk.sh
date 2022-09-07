@@ -37,7 +37,8 @@ for DISK in /dev/sda /dev/sdb /dev/sdc /dev/sdd /dev/sde; do
     if echo n | pvcreate -qt "${DISK}"; then
       echo "${DISK} is not partitioned and has no filesystem signature, adding to volume group"
       # Format the disk as one large Linux partition and create the PV
-      echo 'type=83' | sfdisk "${DISK}"
+      sudo parted "${DISK}" mklabel gpt
+      sudo parted "${DISK}" mkpart primary 0% 100%
       # It's important to wait a second to allow the device file to be created (otherwise there is a race condition)
       sleep 3
       echo n | pvcreate -y -q "${DISK}1" && {
