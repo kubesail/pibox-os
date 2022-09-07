@@ -13,6 +13,8 @@ cat <<'EOF' > /opt/kubesail/pibox-first-boot.sh
 #!/bin/bash
 PATH_REFRESH_SSH_CERTS=/boot/refresh-ssh-certs
 
+ethtool --set-eee eth0 eee off
+
 if [[ -f $PATH_GITHUB_USERNAME ]]; then
     set -e
     mkdir -p /home/pi/.ssh
