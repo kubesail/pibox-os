@@ -16,10 +16,10 @@ sudo sfdisk --delete /dev/sda 1
 sudo sfdisk --delete /dev/sdb 1
 sudo wipefs -a /dev/sda
 sudo wipefs -a /dev/sdb
-sudo parted /dev/sda – mklabel gpt
-sudo parted /dev/sda – mkpart primary 0% 100%
-sudo parted /dev/sdb – mklabel gpt
-sudo parted /dev/sdb – mkpart primary 0% 100%
+sudo parted /dev/sda mklabel gpt
+sudo parted /dev/sda mkpart primary 0% 100%
+sudo parted /dev/sdb mklabel gpt
+sudo parted /dev/sdb mkpart primary 0% 100%
 VG_GROUP_NAME="pibox-group"
 sudo vgcreate "${VG_GROUP_NAME}" /dev/sda1 /dev/sdb1
 sudo lvcreate -n k3s -l "100%FREE" "${VG_GROUP_NAME}"
