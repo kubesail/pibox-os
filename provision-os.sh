@@ -134,6 +134,13 @@ systemctl daemon-reload
 # Install KubeSail helper services
 curl -s https://raw.githubusercontent.com/kubesail/pibox-os/main/setup.sh | bash
 
+# Install pibox-help script
+cat <<EOF > /usr/local/bin/pibox-help
+#!/bin/bash
+curl -sL https://raw.githubusercontent.com/kubesail/pibox-os/main/kubesail-support.sh | sudo bash
+EOF
+chmod +x /usr/local/bin/pibox-help
+
 # This happens with PiShrink. Only uncomment if using packer
 # truncate -s-1 /boot/cmdline.txt
 # echo -n " init=/usr/lib/raspi-config/init_resize.sh" >> /boot/cmdline.txt
