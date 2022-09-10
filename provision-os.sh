@@ -27,7 +27,7 @@ apt-get update -yqq
 apt-get full-upgrade -yqq
 apt-get autoremove -yqq
 apt-get autoclean -yqq
-apt-get install -yqq vim lvm2 openssh-server raspberrypi-kernel-headers samba samba-common-bin
+apt-get install -yqq vim lvm2 openssh-server raspberrypi-kernel-headers samba samba-common-bin tmate
 apt-get remove -yqq iptables nftables
 
 # Kernel settings
