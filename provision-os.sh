@@ -172,6 +172,7 @@ echo \$(date +"%D %T")" Fixing any pods in Unknown state. Waiting 90s after boot
 
 exit 0
 EOF
+chmod +x /opt/kubesail/fix-unknown-pods.sh
 cat <<EOF > /etc/systemd/system/fix-unknown-pods.service
 [Unit]
 Description=Fix Unknown pods
