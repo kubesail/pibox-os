@@ -189,6 +189,33 @@ EOF
 systemctl daemon-reload
 sudo systemctl enable fix-unknown-pods.service
 
+cat <<EOF > /usr/local/bin/rgb
+#!/bin/bash
+# RED
+echo "17" > /sys/class/gpio/export
+echo "out" > /sys/class/gpio/gpio17/direction
+# GREEN
+echo "27" > /sys/class/gpio/export
+echo "out" > /sys/class/gpio/gpio27/direction
+# BLUE
+echo "23" > /sys/class/gpio/export
+echo "out" > /sys/class/gpio/gpio23/direction
+
+while :
+do
+    echo "1" > /sys/class/gpio/gpio17/value
+    sleep 0.2
+    echo "0" > /sys/class/gpio/gpio17/value
+    echo "1" > /sys/class/gpio/gpio27/value
+    sleep 0.2
+    echo "0" > /sys/class/gpio/gpio27/value
+    echo "1" > /sys/class/gpio/gpio23/value
+    sleep 0.2
+    echo "0" > /sys/class/gpio/gpio23/value
+done
+EOF
+chmod +x /usr/local/bin/rgb
+
 # SSH Config
 echo "TCPKeepAlive yes" >> /etc/ssh/sshd_config
 touch /boot/ssh
