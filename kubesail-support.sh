@@ -1,7 +1,5 @@
 #!/bin/bash
 
-set -x
-
 TMPFILE="$(mktemp)"
 KUBECTL="sudo KUBECONFIG=/etc/rancher/k3s/k3s.yaml kubectl"
 RANDOM_KEY=$(echo $RANDOM | md5sum | head -c 20; echo)
