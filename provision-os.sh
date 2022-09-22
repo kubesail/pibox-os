@@ -41,6 +41,7 @@ if [ -f /var/run/reboot-required ]; then
 fi
 
 # Set up samba share
+mkdir -p /var/log/samba/
 mkdir -p /var/lib/rancher/k3s/storage
 echo -e "kubesail\nkubesail" | smbpasswd pi -a -s
 cat <<EOF > /etc/samba/smb.conf
