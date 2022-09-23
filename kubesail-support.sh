@@ -102,9 +102,8 @@ curl -s -H "Content-Type: application/json" -X POST --data-binary @${TMPFILE}.gz
 echo -e "\nUploaded logs to KubeSail support. Please provide the code \"${RANDOM_KEY}\" - thank you"
 
 sudo kubectl get pods -A | grep Unknown && {
-  read -p "It looks like there is an issue we know how to fix automatically. Run fix-it script? [Y/N]" -n 1 -r
-  echo
-  if [[ ! $REPLY =~ ^[Yy]$ ]]
+  read -p "It looks like there is an issue we know how to fix automatically. Run fix-it script? [y/n] " yn
+  if [[ ! $yn =~ ^[Yy]$ ]]
   then
       exit 1
   fi
@@ -114,9 +113,8 @@ sudo kubectl get pods -A | grep Unknown && {
 }
 
 sudo kubectl get namespaces kubesail-agent || {
-  read -p "It looks like the KubeSail agent may not be installed properly. Would you like to fix it? [Y/N]" -n 1 -r
-  echo
-  if [[ ! $REPLY =~ ^[Yy]$ ]]
+  read -p "It looks like the KubeSail agent may not be installed properly. Would you like to fix it? [y/n] " yn
+  if [[ ! $yn =~ ^[Yy]$ ]]
   then
       exit 1
   fi
