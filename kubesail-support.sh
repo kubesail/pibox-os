@@ -95,12 +95,6 @@ sudo pvdisplay >> ${TMPFILE}
 echo -e "\n\nifconfig ==============" >> ${TMPFILE}
 sudo ifconfig >> ${TMPFILE}
 
-echo "Wrote logs to ${TMPFILE}"
-gzip ${TMPFILE}
-
-curl -s -H "Content-Type: application/json" -X POST --data-binary @${TMPFILE}.gz "https://api.kubesail.com/agent/upload-debug-logs/${KUBESAIL_AGENT_KEY}/${RANDOM_KEY}"
-echo -e "\nUploaded logs to KubeSail support. Please provide the code \"${RANDOM_KEY}\" - thank you"
-
 sudo kubectl get pods -A | grep Unknown && {
   read -p "It looks like there is an issue we know how to fix automatically. Run fix-it script? [y/n] " yn
   if [[ ! $yn =~ ^[Yy]$ ]]
@@ -121,3 +115,14 @@ sudo kubectl get namespaces kubesail-agent || {
   sudo kubectl create -f https://api.kubesail.com/byoc
   echo "QR Code should appear in just a few moments"
 }
+
+read -p "Please enter your email address - this will only be used by support to respond to this help request: " email
+sudo echo -e "\n\nEMAIL: $email" >> ${TMPFILE}
+
+echo "Wrote logs to ${TMPFILE}"
+gzip ${TMPFILE}
+
+curl -s -H "Content-Type: application/json" -X POST --data-binary @${TMPFILE}.gz "https://api.kubesail.com/agent/upload-debug-logs/${KUBESAIL_AGENT_KEY}/${RANDOM_KEY}"
+echo -e "\nUploaded logs to KubeSail support. Please provide the code \"${RANDOM_KEY}\" - thank you"
+
+
