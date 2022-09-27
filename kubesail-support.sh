@@ -97,23 +97,21 @@ sudo ifconfig >> ${TMPFILE}
 
 sudo kubectl get pods -A | grep Unknown && {
   read -p "It looks like there is an issue we know how to fix automatically. Run fix-it script? [y/n] " yn
-  if [[ ! $yn =~ ^[Yy]$ ]]
+  if [[ $yn =~ ^[Yy]$ ]]
   then
-      exit 1
+    for i in $(sudo k3s ctr c ls | awk '{print $1}'); do sudo k3s ctr c rm $i; done
+    sudo service k3s restart
+    echo "All done - things should be back up and running in just a moment"
   fi
-  for i in $(sudo k3s ctr c ls | awk '{print $1}'); do sudo k3s ctr c rm $i; done
-  sudo service k3s restart
-  echo "All done - things should be back up and running in just a moment"
 }
 
 sudo kubectl get namespaces kubesail-agent || {
   read -p "It looks like the KubeSail agent may not be installed properly. Would you like to fix it? [y/n] " yn
   if [[ ! $yn =~ ^[Yy]$ ]]
   then
-      exit 1
+    sudo kubectl create -f https://api.kubesail.com/byoc
+    echo "QR Code should appear in just a few moments"
   fi
-  sudo kubectl create -f https://api.kubesail.com/byoc
-  echo "QR Code should appear in just a few moments"
 }
 
 read -p "Please enter your email address - this will only be used by support to respond to this help request: " email
