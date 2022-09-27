@@ -107,7 +107,7 @@ sudo kubectl get pods -A | grep Unknown && {
 
 sudo kubectl get namespaces kubesail-agent || {
   read -p "It looks like the KubeSail agent may not be installed properly. Would you like to fix it? [y/n] " yn
-  if [[ ! $yn =~ ^[Yy]$ ]]
+  if [[ $yn =~ ^[Yy]$ ]]
   then
     sudo kubectl create -f https://api.kubesail.com/byoc
     echo "QR Code should appear in just a few moments"
