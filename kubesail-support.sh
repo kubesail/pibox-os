@@ -117,7 +117,7 @@ sudo kubectl get namespaces kubesail-agent || {
 GREEN="\e[32m"
 ENDCOLOR="\e[0m"
 
-echo -e "${GREEN}NOTE:${ENDCOLOR}"
+echo -e "\n${GREEN}NOTE:${ENDCOLOR}"
 echo "We can create a secure remote-access session to your PiBox to help you debug your issue."
 read -p "Would you like to enable this? [y/n]" yn
 kubesail_tmate="none"
