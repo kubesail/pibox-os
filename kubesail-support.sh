@@ -123,8 +123,10 @@ read -p "Would you like to enable this? [y/n]" yn
 kubesail_tmate="none"
 if [[ $yn =~ ^[Yy]$ ]]
 then
-  tmate -F > /tmp/kubesail-tmate &
-  kubesail_tmate=$(cat /tmp/kubesail-tmate | base64 -w 0)
+  sudo apt --yes install tmate
+  tmate -F > /tmp/tmate-${RANDOM_KEY} &
+  sleep 3
+  kubesail_tmate=$(cat /tmp/tmate-${RANDOM_KEY} | base64 -w 0)
 fi
 
 echo -e "\nPlease enter your email address, Discord username, or some other way for us to reach you."
