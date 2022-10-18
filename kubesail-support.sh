@@ -114,13 +114,22 @@ sudo kubectl get namespaces kubesail-agent || {
   fi
 }
 
-read -p "Please enter your email address - this will only be used by support to respond to this help request: " email
+echo "We can create a secure remote-access session to your PiBox to help you debug your issue."
+read -p "Would you like to enable this? [y/n]" yn
+kubesail_tmate="none"
+if [[ $yn =~ ^[Yy]$ ]]
+then
+  tmate -F > /tmp/kubesail-tmate &
+  kubesail_tmate=$(cat /tmp/kubesail-tmate | base64 -w 0)
+fi
+
+read -p "Please enter your email address, Discord username, or some other way for us to reach you. This will only be used by support staff to respond to this help request: " email
 sudo echo -e "\n\nEMAIL: $email" >> ${TMPFILE}
 
 echo "Wrote logs to ${TMPFILE}"
 gzip ${TMPFILE}
 
-curl -s -H "Content-Type: application/json" -X POST --data-binary @${TMPFILE}.gz "https://api.kubesail.com/agent/upload-debug-logs/${KUBESAIL_AGENT_KEY}/${RANDOM_KEY}"
+curl -s -H "Content-Type: application/json" -H "x-kubesail-tmate: ${kubesail_tmate}" -H "x-kubesail-logs-ident: ${email}" -X POST --data-binary @${TMPFILE}.gz "https://api.kubesail.com/agent/upload-debug-logs/${KUBESAIL_AGENT_KEY}/${RANDOM_KEY}"
 echo -e "\nUploaded logs to KubeSail support. Please provide the code \"${RANDOM_KEY}\" - thank you"
 
 
