@@ -127,7 +127,8 @@ then
   kubesail_tmate=$(cat /tmp/kubesail-tmate | base64 -w 0)
 fi
 
-read -p "Please enter your email address, Discord username, or some other way for us to reach you. This will only be used by support staff to respond to this help request: " email
+echo -e "\nPlease enter your email address, Discord username, or some other way for us to reach you."
+read -p "This will only be used by support staff to respond to this help request: " email
 sudo echo -e "\n\nEMAIL: $email" >> ${TMPFILE}
 
 echo "Wrote logs to ${TMPFILE}"
