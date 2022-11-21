@@ -25,7 +25,7 @@ DISKS_TO_ADD=""
 # sfdisk --delete /dev/sdb 1
 # wipefs -a /dev/sda
 # wipefs -a /dev/sdb
-# //// delete k3s fstab mount dependency 
+# sed -i 's/\/dev\/pibox-group\/k3s \/var\/lib\/rancher ext4 defaults,discard,nofail,noatime,data=ordered,errors=remount-ro 0 0//g' /etc/fstab
 
 echo "Running provision-disk.sh"
 
