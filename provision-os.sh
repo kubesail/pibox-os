@@ -64,6 +64,8 @@ chmod +x /opt/kubesail/update-framebuffer.sh
 sed -i 's/.MaxLevelStore.*/MaxLevelStore=info/' /etc/systemd/journald.conf
 sed -i 's/.MaxLevelSyslog.*/MaxLevelSyslog=info/' /etc/systemd/journald.conf
 sed -i "s/#Storage.*/Storage=volatile/" /etc/systemd/journald.conf
+sed -i "s/#SystemMaxUse.*/SystemMaxUse=10M/" /etc/systemd/journald.conf
+sed -i "s/#SystemMaxFileSize.*/SystemMaxFileSize=10M/" /etc/systemd/journald.conf
 systemctl restart systemd-journald.service
 
 # Add tmpfs at /tmp to reduce EMMC wear
