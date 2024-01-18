@@ -36,6 +36,13 @@ grep -qxF 'cgroup_enable=memory cgroup_memory=1' /boot/cmdline.txt || sed -i 's/
 # Show text output during startup / shutdown (useful if reboot hangs)
 sed -i 's/quiet splash plymouth.ignore-serial-consoles//' /boot/cmdline.txt
 
+# Fully disable IPV6 - kubernetes does not play non-trivially with it
+cat <<EOF > /etc/modprobe.d/ipv6.conf
+alias net-pf-10 off
+alias ipv6 off
+options ipv6 disable_ipv6=1
+EOF
+
 if [ -f /var/run/reboot-required ]; then
   echo 'PLEASE REBOOT TO ACTIVATE NEW KERNEL'
   exit 0
