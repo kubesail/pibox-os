@@ -27,8 +27,9 @@ apt-get update -yqq
 apt-get full-upgrade -yqq
 apt-get autoremove -yqq
 apt-get autoclean -yqq
-apt-get install -yqq vim lvm2 openssh-server raspberrypi-kernel-headers samba samba-common-bin tmate sysstat smartmontools whois git
-apt-get remove -yqq iptables nftables
+apt-get install -yqq vim lvm2 openssh-server raspberrypi-kernel-headers samba samba-common-bin tmate sysstat smartmontools whois git iptables
+apt-get remove -yqq nftables
+update-alternatives --set iptables /usr/sbin/iptables-legacy
 
 # Kernel settings
 grep -qxF 'cgroup_enable=memory cgroup_memory=1' /boot/cmdline.txt || sed -i 's/$/ cgroup_enable=memory cgroup_memory=1/' /boot/cmdline.txt
