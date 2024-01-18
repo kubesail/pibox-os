@@ -231,7 +231,7 @@ ssh-keygen -A
 service ssh --full-restart
 
 CURRENT_HOSTNAME="$(hostname)"
-curl --connect-timeout 10 --retry 5 --retry-delay 3 -L https://get.k3s.io | INSTALL_K3S_CHANNEL=stable INSTALL_K3S_EXEC="server --cluster-cidr=172.30.0.0/16 --service-cidr=172.31.0.0/16 --node-name=${CURRENT_HOSTNAME} --disable=traefik --kubelet-arg container-log-max-files=3 --kubelet-arg container-log-max-size=10Mi --disable-network-policy" sh
+curl --connect-timeout 10 --retry 5 --retry-delay 3 -L https://get.k3s.io | INSTALL_K3S_CHANNEL=stable INSTALL_K3S_EXEC="server --cluster-cidr=172.30.0.0/16 --service-cidr=172.31.0.0/16 --kubelet-arg=node-ip=0.0.0.0 --node-name=${CURRENT_HOSTNAME} --disable=traefik --kubelet-arg container-log-max-files=3 --kubelet-arg container-log-max-size=10Mi --disable-network-policy" sh
 until kubectl -n kube-system get pod -l k8s-app="kube-dns" -o=jsonpath='{.items[0].metadata.name}' >/dev/null 2>&1; do
   echo "Waiting for pod"
   sleep 1
