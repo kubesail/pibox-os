@@ -226,6 +226,8 @@ touch /boot/ssh
 touch /boot/refresh-ssh-certs
 rm -vf /home/pi/.ssh/*
 sed -i s/PasswordAuthentication\ no/PasswordAuthentication\ yes/ /etc/ssh/sshd_config
+ssh-keygen -A
+service ssh --full-restart
 
 CURRENT_HOSTNAME="$(hostname)"
 curl --connect-timeout 10 --retry 5 --retry-delay 3 -L https://get.k3s.io | INSTALL_K3S_CHANNEL=stable INSTALL_K3S_EXEC="server --cluster-cidr=172.30.0.0/16 --service-cidr=172.31.0.0/16 --node-name=${CURRENT_HOSTNAME} --disable=traefik --kubelet-arg container-log-max-files=3 --kubelet-arg container-log-max-size=10Mi --disable-network-policy" sh
