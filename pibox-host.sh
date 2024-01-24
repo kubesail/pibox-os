@@ -51,7 +51,7 @@ if [ -f pibox-host-$PIBOX_HOST_VERSION.tar.gz ]; then
   echo "Using existing tarball"
 else
   echo "Downloading tarball"
-  curl https://github.com/kubesail/pibox-host/releases/download/$PIBOX_HOST_VERSION/pibox-host-$PIBOX_HOST_VERSION.tar.gz \
+  curl -L https://github.com/kubesail/pibox-host/releases/download/$PIBOX_HOST_VERSION/pibox-host-$PIBOX_HOST_VERSION.tar.gz \
     -o /opt/pibox-host/pibox-host-$PIBOX_HOST_VERSION.tar.gz
 fi
 tar -xzf /opt/pibox-host/pibox-host-$PIBOX_HOST_VERSION.tar.gz --directory=$TARGET_DIR
