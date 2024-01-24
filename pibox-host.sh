@@ -38,7 +38,7 @@ apt-get install -yqq \
 # Give sudoers NOPASSWD requirement (same as pi user)
 sed -i 's/%sudo\tALL=(ALL:ALL) ALL/%sudo\tALL=(ALL:ALL) NOPASSWD: ALL/' /etc/sudoers
 # Create root files directory (and mount it)
-mkdir /files
+mkdir -p /files
 groupadd sambagroup
 
 # Download pibox-host backend
