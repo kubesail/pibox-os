@@ -42,7 +42,7 @@ mkdir -p /files
 groupadd sambagroup
 
 # Download pibox-host backend
-mkdir /opt/pibox-host
+mkdir -p /opt/pibox-host
 PIBOX_HOST_VERSION=$(curl -s "https://api.github.com/repos/kubesail/pibox-host/releases/latest" | jq -r '.tag_name')
 TARGET_DIR=/opt/pibox-host/$PIBOX_HOST_VERSION
 mkdir -p $TARGET_DIR
