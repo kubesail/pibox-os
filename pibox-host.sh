@@ -124,10 +124,6 @@ dphys-swapfile uninstall
 update-rc.d dphys-swapfile remove
 apt-get -yqq purge dphys-swapfile || true
 
-# Disable SSH
-systemctl stop ssh
-systemctl disable ssh
-
 cat <<EOF > /usr/local/bin/rgb
 #!/bin/bash
 # RED
@@ -162,6 +158,11 @@ echo '' > /var/log/user.log
 echo '' > /var/log/faillog
 echo '' > /var/log/messages
 echo '' > /var/log/auth.log
+
+rm -vf /home/pi/.ssh/*
+sed -i s/#PasswordAuthentication\ yes/PasswordAuthentication\ no/ /etc/ssh/sshd_config
+ssh-keygen -A
+service ssh --full-restart
 
 # Clean bash history
 history -c && history -w
