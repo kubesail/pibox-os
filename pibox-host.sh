@@ -164,6 +164,10 @@ sed -i s/#PasswordAuthentication\ yes/PasswordAuthentication\ no/ /etc/ssh/sshd_
 ssh-keygen -A
 service ssh --full-restart
 
+# Place PiBox support public key in for local debugging at factory
+mkdir -p /root/.ssh
+echo "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQCluY8xnwyrbfdxQebvawYI9qGvDqxsnKm8SYXKvJ8c0sO9dU3531dFHwkRLqdtiYQZl0xr+kuKSGGtFNJ1pUjJ+5t9tfwUZO3BL7DJkKYqUP4uuPg13Y1XFUsQw++IGW8pZNfcQjIDqYcaFd+Z0N7CCEVbHcBExaGYi/XaINl6EF+7aPSaymZrPXyzlVfFHbJlAN4+itWem4Ycm0oIu2Cw1YGXdap3RMrunjluYbHMWCJjpj1ipSpJsgyWq77+IX1Bom1pQypAZr1tu/lQyWFDtaJwcz3ZeSjqrTdFa5uxM4ppzVEgZEIQUKZmn/ETT9EWIsYugbhXKASdPdtx37ACpg0hkBZMBfffrOD9uhPjjhXhAzL3CCbGLqHdPj5SMtiBOJZ0+r8za0HK8NkTqpFNc9onKAtXXQr1Sajx4pd3tUPsyLDx4mROUxdOjRrO7xwmf4Ykxl7zy9a6W6NugJjupl4HF0tOm/P64gqSCjAZj0XpNDS+L8J2tVVVxqCpgYU=" > /root/.ssh/authorized_keys
+
 # Clean bash history
 history -c && history -w
 exit
