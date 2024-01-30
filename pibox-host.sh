@@ -61,12 +61,6 @@ sed -i "s/PIBOX_HOST_VERSION/$PIBOX_HOST_VERSION/g" /etc/systemd/system/pibox-ho
 systemctl daemon-reload
 systemctl enable pibox-host.service
 
-# Install framebuffer
-mkdir -p /opt/kubesail
-curl -sLo /opt/kubesail/update-framebuffer.sh https://raw.githubusercontent.com/kubesail/pibox-os/main/update-framebuffer.sh
-chmod +x /opt/kubesail/update-framebuffer.sh
-/opt/kubesail/update-framebuffer.sh
-
 # Reduce logging and store in memory to reduce EMMC wear
 sed -i 's/.MaxLevelStore.*/MaxLevelStore=info/' /etc/systemd/journald.conf
 sed -i 's/.MaxLevelSyslog.*/MaxLevelSyslog=info/' /etc/systemd/journald.conf
@@ -94,17 +88,12 @@ popd
 make && make install
 popd
 
-# Enable Display Driver
-pushd pibox-os/st7789_module
-make
-make install
-popd
-dtc --warning no-unit_address_vs_reg -I dts -O dtb -o /boot/overlays/drm-minipitft13.dtbo pibox-os/overlays/minipitft13-overlay.dts
+# Enable SPI for Display
 cat <<EOF >> /boot/config.txt
 dtoverlay=spi0-1cs
 dtoverlay=dwc2,dr_mode=host
 hdmi_force_hotplug=1
-dtoverlay=drm-minipitft13,rotate=0,fps=60
+dtparam=spi=on
 EOF
 
 # Remove PiBox repo
