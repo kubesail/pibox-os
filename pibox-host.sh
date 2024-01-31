@@ -35,6 +35,9 @@ apt-get install -yqq \
   jq build-essential libcairo2-dev libpango1.0-dev \
   libjpeg-dev libgif-dev librsvg2-dev nodejs
 
+# Install node version manager
+npm i -g n
+
 # Give sudoers NOPASSWD requirement (same as pi user)
 sed -i 's/%sudo\tALL=(ALL:ALL) ALL/%sudo\tALL=(ALL:ALL) NOPASSWD: ALL/' /etc/sudoers
 # Create root files directory (and mount it)
