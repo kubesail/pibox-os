@@ -92,7 +92,7 @@ make && make install
 popd
 
 # Enable SPI for Display
-cat <<EOF >> /boot/config.txt
+cat <<EOF >> /boot/firmware/config.txt
 dtoverlay=spi0-1cs
 dtoverlay=dwc2,dr_mode=host
 hdmi_force_hotplug=1
