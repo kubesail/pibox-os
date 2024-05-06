@@ -43,7 +43,9 @@ apt-get install -yqq \
   jq build-essential libcairo2-dev libpango1.0-dev \
   libjpeg-dev libgif-dev librsvg2-dev nodejs
 
-# Disable ASPM (low power PCIe mode) for our ASM1061 chip -- it does not play nicely with the CM4 during heavy workloads
+# Disable ASPM (low power PCIe mode) for our ASM1061 chip.
+# It does not play nicely with the CM4 during heavy workloads
+# and will flood system logs with AER warnings
 sed -i 's/rootwait/pcie_aspm=off rootwait/' /boot/firmware/cmdline.txt
 
 # Install node version manager
