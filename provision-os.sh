@@ -35,6 +35,10 @@ update-alternatives --set iptables /usr/sbin/iptables-legacy
 grep -qxF 'cgroup_enable=memory cgroup_memory=1' /boot/cmdline.txt || sed -i 's/$/ cgroup_enable=memory cgroup_memory=1/' /boot/cmdline.txt
 # Show text output during startup / shutdown (useful if reboot hangs)
 sed -i 's/quiet splash plymouth.ignore-serial-consoles//' /boot/cmdline.txt
+# Disable ASPM (low power PCIe mode) for our ASM1061 chip.
+# It does not play nicely with the CM4 during heavy workloads
+# and will flood system logs with AER warnings
+sed -i 's/rootwait/pcie_aspm=off rootwait/' /boot/firmware/cmdline.txt
 
 # Fully disable IPV6 - kubernetes does not play non-trivially with it
 cat <<EOF > /etc/modprobe.d/ipv6.conf
